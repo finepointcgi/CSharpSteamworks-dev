@@ -1,9 +1,5 @@
 C:\Users\FinepointCGI\Documents\CSharpSteamworks\.mono\temp\bin\Debug\steam_api64.dll
-C:\Users\FinepointCGI\Documents\CSharpSteamworks\.mono\temp\bin\Debug\CSharpSteamworks.dll
-C:\Users\FinepointCGI\Documents\CSharpSteamworks\.mono\temp\bin\Debug\CSharpSteamworks.pdb
 C:\Users\FinepointCGI\Documents\CSharpSteamworks\.mono\temp\bin\Debug\Facepunch.Steamworks.Win64.dll
-C:\Users\FinepointCGI\Documents\CSharpSteamworks\.mono\temp\bin\Debug\Facepunch.Steamworks.Win64.pdb
-C:\Users\FinepointCGI\Documents\CSharpSteamworks\.mono\temp\bin\Debug\Facepunch.Steamworks.Win64.xml
 C:\Users\FinepointCGI\Documents\CSharpSteamworks\.mono\temp\obj\Debug\CSharpSteamworks.csproj.AssemblyReference.cache
 C:\Users\FinepointCGI\Documents\CSharpSteamworks\.mono\temp\obj\Debug\CSharpSteamworks.GeneratedMSBuildEditorConfig.editorconfig
 C:\Users\FinepointCGI\Documents\CSharpSteamworks\.mono\temp\obj\Debug\CSharpSteamworks.AssemblyInfoInputs.cache
@@ -12,3 +8,5 @@ C:\Users\FinepointCGI\Documents\CSharpSteamworks\.mono\temp\obj\Debug\CSharpStea
 C:\Users\FinepointCGI\Documents\CSharpSteamworks\.mono\temp\obj\Debug\CSharpSteamworks.csproj.CopyComplete
 C:\Users\FinepointCGI\Documents\CSharpSteamworks\.mono\temp\obj\Debug\CSharpSteamworks.dll
 C:\Users\FinepointCGI\Documents\CSharpSteamworks\.mono\temp\obj\Debug\CSharpSteamworks.pdb
+C:\Users\FinepointCGI\Documents\CSharpSteamworks\.mono\temp\bin\Debug\CSharpSteamworks.dll
+C:\Users\FinepointCGI\Documents\CSharpSteamworks\.mono\temp\bin\Debug\CSharpSteamworks.pdb

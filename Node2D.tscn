@@ -4,7 +4,6 @@
 
 [node name="Node2D" type="Node2D"]
 script = ExtResource( 1 )
-server = true
 
 [node name="Button" type="Button" parent="."]
 margin_left = 40.0
@@ -41,12 +40,18 @@ margin_right = 294.0
 margin_bottom = 543.0
 text = "Save file"
 
-[node name="Create Server" type="Button" parent="."]
+[node name="Connect To Server" type="Button" parent="."]
 margin_left = 358.0
 margin_top = 312.0
 margin_right = 610.0
 margin_bottom = 372.0
-text = "Save file"
+text = "Connect To Local Server"
+
+[node name="TextEdit" type="TextEdit" parent="Connect To Server"]
+margin_left = 340.0
+margin_top = 5.0
+margin_right = 552.0
+margin_bottom = 45.0
 
 [node name="Load File" type="Button" parent="."]
 margin_left = 39.0
@@ -60,5 +65,5 @@ text = "Load file"
 [connection signal="button_down" from="Get Achevements" to="." method="_on_Get_Achevements_button_down"]
 [connection signal="button_down" from="UnlockAchevo" to="." method="_on_UnlockAchevo_button_down"]
 [connection signal="button_down" from="Save file" to="." method="_on_Save_file_button_down"]
-[connection signal="button_down" from="Create Server" to="." method="_on_Create_Server_button_down"]
+[connection signal="button_down" from="Connect To Server" to="." method="_on_Connect_To_Server_button_down"]
 [connection signal="button_down" from="Load File" to="." method="_on_Load_File_button_down"]

@@ -3,15 +3,15 @@ using Steamworks;
 using Steamworks.Data;
 using System;
 using System.Text;
+using System.Threading.Tasks;
+
 public class Node2D : Godot.Node2D
 {
     // Declare member variables here. Examples:
     // private int a = 2;
     // private string b = "text";
-    [Export]
-    public bool server;
-    public MyServer MyServer;
-    public Lobby Lobby;
+
+   
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
@@ -27,10 +27,11 @@ public class Node2D : Godot.Node2D
     }
 
 //  // Called every frame. 'delta' is the elapsed time since the previous frame.
-//  public override void _Process(float delta)
-//  {
-//      
-//  }
+  public override void _Process(float delta)
+  {
+        //SocketServerManager.Receive();
+        //ConnectionManager.Receive();
+    }
 
     public void _on_Button_button_down(){
         Console.WriteLine(SteamClient.SteamId); // Your SteamId
@@ -46,6 +47,13 @@ public class Node2D : Godot.Node2D
                 //friend.SendMessage("hello from steam integration");
             }
         }
+    }
+
+
+    private void DebugOutput(NetDebugOutput arg1, string arg2)
+    {
+        Console.WriteLine(arg1);
+        Console.WriteLine(arg2);
     }
 
     public void _on_Get_Achevements_button_down(){
@@ -72,17 +80,12 @@ public class Node2D : Godot.Node2D
     }
 
     public void _on_Connect_To_Server_button_down(){
-        SteamId id =  
-        _ = SteamMatchmaking.JoinLobbyAsync(int.Parse(GetNode<TextEdit>("TextEdit").Text)).Result;
         }
 
     public void _on_Create_Lobby_To_Server_button_down(){
-        Lobby Lobby = (Lobby)SteamMatchmaking.CreateLobbyAsync(5).Result;
-        _ = Lobby.Join().Result;
-        MyServer = SteamNetworkingSockets.CreateNormalSocket<MyServer>(Steamworks.Data.NetAddress.AnyIp(21893));
+
     }
-    public void test()
-    {
-        
-    }
+
 }
+
+

@@ -3,6 +3,8 @@
     <TargetFramework>net472</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\GitHub\Facepunch.Steamworks\Facepunch.Steamworks\Facepunch.Steamworks.Win64.csproj" />
+    <Reference Include="Facepunch.Steamworks.Win64">
+      <HintPath>Facepunch.Steamworks.Win64.dll</HintPath>
+    </Reference>
   </ItemGroup>
 </Project>
