@@ -14,6 +14,7 @@ namespace CSharpSteamworks.Steam
         {
             base.OnConnected(info);
             Console.WriteLine("ConnectionOnConnected");
+            
         }
 
         public override void OnConnecting(ConnectionInfo info)

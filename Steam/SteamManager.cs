@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Godot;
+using CSharpSteamworks.Steam;
 
 public class SteamManager : Node
 {
@@ -29,6 +30,10 @@ public class SteamManager : Node
     private bool daRealOne { get; set; } = false;
     public string PlayerEloDataString { get; set; } = "";
     public int PlayerElo { get; set; } = 0;
+
+    public static event Action<List<Lobby>> OnLobbyRefreshCompleted;
+    //[Signal]
+    //delegate void OnLobbyRefreshCompleted(List<Lobby> lobbies);
 
     public SteamManager()
     {
@@ -193,6 +198,7 @@ public class SteamManager : Node
 
     void OnLobbyGameCreatedCallback(Lobby lobby, uint ip, ushort port, SteamId steamId)
     {
+        Console.WriteLine("firing callback for on lobby game created.");
         AcceptP2P(OpponentSteamId);
         //SceneManager.LoadScene("SceneToLoad");
     }
@@ -201,8 +207,10 @@ public class SteamManager : Node
     {
         try
         {
+            
+            
             // For two players to send P2P packets to each other, they each must call this on the other player
-            SteamNetworking.AcceptP2PSessionWithUser(opponentId);
+            //SteamNetworking.AcceptP2PSessionWithUser(opponentId);
         }
         catch
         {
@@ -222,6 +230,8 @@ public class SteamManager : Node
             // But after host received player chat message I set off the OnLobbyGameCreated callback with lobby.SetGameServer(PlayerSteamId)
             lobby.SetJoinable(false);
             lobby.SetGameServer(PlayerSteamId);
+            lobby.SendChatString("We are connected!");
+            Console.WriteLine(friend.Name + " has connected!");
         }
     }
 
@@ -314,13 +324,14 @@ public class SteamManager : Node
                         activeRankedLobbies.Add(lobby);
                     }
                 }
-                Console.WriteLine(activeRankedLobbies);
+                EmitSignal(nameof(OnLobbyRefreshCompleted), lobbies.ToList());
+                GD.Print(activeRankedLobbies);
                 return true;
             }
             else
             {
                 activeUnrankedLobbies.Clear();
-                Lobby[] lobbies = await SteamMatchmaking.LobbyList.WithMaxResults(20).WithKeyValue("isRankedData", "FALSE").RequestAsync();
+                Lobby[] lobbies = await SteamMatchmaking.LobbyList.WithMaxResults(20).RequestAsync();//.WithKeyValue("isRankedData", "FALSE").RequestAsync();
                 if (lobbies != null)
                 {
                     foreach (Lobby lobby in lobbies.ToList())
@@ -328,7 +339,9 @@ public class SteamManager : Node
                         activeUnrankedLobbies.Add(lobby);
                     }
                 }
-                Console.WriteLine(activeUnrankedLobbies);
+                
+                GD.Print(activeUnrankedLobbies);
+                OnLobbyRefreshCompleted.Invoke(lobbies.ToList());
                 return true;
             }
         }
@@ -412,6 +425,9 @@ public class SteamManager : Node
 
             currentLobby = hostedMultiplayerLobby;
             Console.WriteLine("Lobby was created");
+
+            SteamSockets s = new SteamSockets();
+            s.CreateSteamSocketServer();
             return true;
         }
         catch (Exception exception)

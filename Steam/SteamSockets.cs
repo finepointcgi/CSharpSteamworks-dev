@@ -25,6 +25,7 @@ namespace CSharpSteamworks.Steam
         {
             // Helpful to reduce time to use SteamNetworkingSockets later
             SteamNetworkingUtils.InitRelayNetworkAccess();
+            
         }
 
         public override void _Process(float delta)
@@ -49,7 +50,7 @@ namespace CSharpSteamworks.Steam
         }
     }
 
-    private void CreateSteamSocketServer()
+    public void CreateSteamSocketServer()
     {
         steamSocketManager = SteamNetworkingSockets.CreateRelaySocket<SteamSocketManager>(0);
         // Host needs to connect to own socket server with a ConnectionManager to send/receive messages
@@ -57,9 +58,10 @@ namespace CSharpSteamworks.Steam
         steamConnectionManager = SteamNetworkingSockets.ConnectRelay<SteamConnectionManager>(PlayerSteamId);
         activeSteamSocketServer = true;
         activeSteamSocketConnection = true;
+        Console.WriteLine("created socket server!");
     }
 
-    private void JoinSteamSocketServer()
+    public void JoinSteamSocketServer()
     {
         if (NOT_HOST)
         {
