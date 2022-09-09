@@ -32,6 +32,7 @@ public class SteamManager : Node
     public int PlayerElo { get; set; } = 0;
 
     public static event Action<List<Lobby>> OnLobbyRefreshCompleted;
+    public static event Action<string> OnPlayerJoinLobby;
     //[Signal]
     //delegate void OnLobbyRefreshCompleted(List<Lobby> lobbies);
 
@@ -301,6 +302,7 @@ public class SteamManager : Node
             AcceptP2P(OpponentSteamId);
             LobbyPartnerDisconnected = false;
         }
+        OnPlayerJoinLobby.Invoke(friend.Name);
     }
 
     void OnDlcInstalledCallback(AppId appId)
@@ -425,7 +427,9 @@ public class SteamManager : Node
 
             currentLobby = hostedMultiplayerLobby;
             Console.WriteLine("Lobby was created");
-
+            //var friend = new Friend();
+            //friend. = PlayerName;
+            OnPlayerJoinLobby(PlayerName);
             SteamSockets s = new SteamSockets();
             s.CreateSteamSocketServer();
             return true;

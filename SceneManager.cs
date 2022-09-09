@@ -2,6 +2,8 @@ using Godot;
 using System;
 using System.Collections.Generic;
 using Steamworks.Data;
+using Steamworks;
+
 public class SceneManager : Node2D
 {
     // Declare member variables here. Examples:
@@ -10,12 +12,15 @@ public class SceneManager : Node2D
     private SteamManager steamManager;
     [Export]
     public PackedScene LobbyElement;
+    [Export]
+    public PackedScene LobbyPlayer;
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
         steamManager = GetNode<SteamManager>("Steam Manager");
        // steamManager.Connect("OnLobbyRefreshCompleted", this, "OnLobbyRefreshCompleted");
         SteamManager.OnLobbyRefreshCompleted += OnLobbyRefreshCompleted;
+        SteamManager.OnPlayerJoinLobby += OnPlayerJoinLobby;
     }
 
 //  // Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -47,5 +52,11 @@ public class SceneManager : Node2D
 
     private void _on_Send_Chat_Message_button_down(){
         
+    }
+
+    private void OnPlayerJoinLobby(string friend){
+        var element = LobbyPlayer.Instance() as LobbyPlayer;
+        element.SetPlayerInfo(friend);
+        GetNode<VBoxContainer>("Lobby").AddChild(element);
     }
 }

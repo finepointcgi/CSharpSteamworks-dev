@@ -1,4 +1,3 @@
-C:\Users\FinepointCGI\Documents\CSharpSteamworks\.mono\temp\bin\Debug\steam_api64.dll
 C:\Users\FinepointCGI\Documents\CSharpSteamworks\.mono\temp\bin\Debug\Facepunch.Steamworks.Win64.dll
 C:\Users\FinepointCGI\Documents\CSharpSteamworks\.mono\temp\obj\Debug\CSharpSteamworks.csproj.AssemblyReference.cache
 C:\Users\FinepointCGI\Documents\CSharpSteamworks\.mono\temp\obj\Debug\CSharpSteamworks.GeneratedMSBuildEditorConfig.editorconfig
