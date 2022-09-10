@@ -9,3 +9,4 @@ C:\Users\FinepointCGI\Documents\CSharpSteamworks\.mono\temp\obj\Debug\CSharpStea
 C:\Users\FinepointCGI\Documents\CSharpSteamworks\.mono\temp\obj\Debug\CSharpSteamworks.pdb
 C:\Users\FinepointCGI\Documents\CSharpSteamworks\.mono\temp\bin\Debug\CSharpSteamworks.dll
 C:\Users\FinepointCGI\Documents\CSharpSteamworks\.mono\temp\bin\Debug\CSharpSteamworks.pdb
+C:\Users\FinepointCGI\Documents\CSharpSteamworks\.mono\temp\bin\Debug\Newtonsoft.Json.dll

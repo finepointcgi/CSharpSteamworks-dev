@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Steamworks.Data;
 using Steamworks;
 using System.Linq;
+using CSharpSteamworks.Networking;
 
 public class SceneManager : Node2D
 {
@@ -78,10 +79,11 @@ public class SceneManager : Node2D
         playerDict.Add("isReady", "true");
 
         if (steamManager.IsHost){
+           
          SteamManager.steamConnectionManager.SendMessages(SteamManager.steamSocketManager.Connected.ToArray(),
-                SteamManager.steamSocketManager.Connected.Count, "test");
+                SteamManager.steamSocketManager.Connected.Count, PacketIO.PackObject(PacketTypes.HostStartGame, playerDict));
         }else{
-            SteamManager.steamConnectionManager.Connection.SendMessage("test");
+            SteamManager.steamConnectionManager.Connection.SendMessage(PacketIO.PackObject(PacketTypes.GuestReady, playerDict));
         }
     }
 

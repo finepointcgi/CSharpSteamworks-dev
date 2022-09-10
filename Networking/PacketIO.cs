@@ -12,10 +12,11 @@ namespace CSharpSteamworks.Networking
             return JsonConvert.DeserializeObject<T>(json);
         }
 
-        public static void PackObject<T>(PacketTypes type, T obj)
+        public static byte[] PackObject<T>(PacketTypes type, T obj)
         {
             Packet packet = new Packet((int)type);
             packet.WriteString(JsonConvert.SerializeObject(obj, Formatting.None));
+            return packet.ToArray();
         }
     }
 }
