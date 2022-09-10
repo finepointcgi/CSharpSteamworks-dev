@@ -65,4 +65,25 @@ public class SceneManager : Node2D
         element.SetPlayerInfo(friend);
         GetNode<VBoxContainer>("Lobby").AddChild(element);
     }
+
+    private void _on_Ready_button_down(){
+        
+        Dictionary<string, string> playerDict = new Dictionary<string, string>();
+        playerDict.Add("playername", steamManager.PlayerSteamId.Value.ToString());
+        playerDict.Add("isReady", "true");
+
+        if (steamManager.IsHost){
+         SteamManager.steamConnectionManager.SendMessages(SteamManager.steamSocketManager.Connected.ToArray(),
+                SteamManager.steamSocketManager.Connected.Count, "test");
+        }else{
+            SteamManager.steamConnectionManager.Connection.SendMessage("test");
+        }
+    }
+
+    private void _on_LeaveLobby_button_down(){
+        foreach (var item in steamManager.activeUnrankedLobbies)
+        {
+            item.Leave();
+        }
+    }
 }

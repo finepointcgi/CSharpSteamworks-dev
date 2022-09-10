@@ -11,3 +11,9 @@ script = ExtResource( 1 )
 margin_right = 253.0
 margin_bottom = 40.0
 text = "asdfasdfsdfsdaf"
+
+[node name="Ready" type="RichTextLabel" parent="."]
+margin_left = 168.0
+margin_right = 253.0
+margin_bottom = 40.0
+text = "Not Ready"

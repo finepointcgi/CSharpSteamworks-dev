@@ -23,4 +23,13 @@ public class LobbyPlayer : Control
     public void SetPlayerInfo(string player){
         GetNode<RichTextLabel>("RichTextLabel").Text = player;
     }
+
+    public void SetReadyStatus(bool ready){
+        if(ready){
+            GetNode<RichTextLabel>("Ready").Text = "Ready";
+        } else
+        {
+            GetNode<RichTextLabel>("Ready").Text = "Not Ready";
+        }
+    }
 }

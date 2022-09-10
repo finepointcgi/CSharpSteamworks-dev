@@ -148,16 +148,32 @@ public class SteamManager : Node
     {
         base._Process(delta);
         SteamClient.RunCallbacks();
+        SteamClient.RunCallbacks();
+        try
+        {
+            if (steamSocketManager != null )
+            {
+                steamSocketManager.Receive();
+            }
+            if(steamConnectionManager != null && steamConnectionManager.Connected){
+                steamConnectionManager.Receive();
+            }
+        }
+        catch
+        {
+            Console.WriteLine("Error receiving data on socket/connection");
+        }
     }
-    // public override void _Notification(int what)
-    // {
-    //     if (what == MainLoop.NotificationWmQuitRequest)
-    //         if (daRealOne)
-    //         {
-    //             gameCleanup();
-    //         }
-    //     GetTree().Quit(); // default behavior
-    // }
+
+    public override void _Notification(int what)
+    {
+        if (what == MainLoop.NotificationWmQuitRequest)
+            if (daRealOne)
+            {
+                gameCleanup();
+            }
+        GetTree().Quit(); // default behavior
+    }
     
 
     // Place where you can update saves, etc. on sudden game quit as well
@@ -263,7 +279,11 @@ public class SteamManager : Node
             currentLobby = joinedLobby;
             OpponentSteamId = id;
             LobbyPartnerDisconnected = false;
-
+            
+            foreach (Friend friend in joinedLobby.Members){
+                OnPlayerJoinLobby.Invoke(friend.Name);
+            }
+            
             //SceneManager.LoadScene("Scene to load");
         }
     }
@@ -368,7 +388,7 @@ public class SteamManager : Node
     {
         try
         {
-            var createLobbyOutput = await SteamMatchmaking.CreateLobbyAsync(2);
+            var createLobbyOutput = await SteamMatchmaking.CreateLobbyAsync(5);
             if (!createLobbyOutput.HasValue)
             {
                 Console.WriteLine("Lobby created but not correctly instantiated");
@@ -411,6 +431,7 @@ public class SteamManager : Node
             hostedMultiplayerLobby = createLobbyOutput.Value;
             hostedMultiplayerLobby.SetPublic();
             hostedMultiplayerLobby.SetJoinable(true);
+            hostedMultiplayerLobby.SetData("ownerNameDataString", PlayerName);
             //hostedMultiplayerLobby.SetData("staticDataString", lobbyParameters.ToString());
 
             currentLobby = hostedMultiplayerLobby;

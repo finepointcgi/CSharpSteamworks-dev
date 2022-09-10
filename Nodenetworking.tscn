@@ -25,7 +25,14 @@ margin_left = 36.0
 margin_top = 99.0
 margin_right = 251.0
 margin_bottom = 147.0
-text = "Join Lobby"
+text = "Refresh Lobby"
+
+[node name="Button4" type="Button" parent="."]
+margin_left = 36.0
+margin_top = 172.0
+margin_right = 251.0
+margin_bottom = 220.0
+text = "Leave Lobbies"
 
 [node name="Button3" type="Button" parent="."]
 margin_left = 298.0
@@ -75,7 +82,16 @@ margin_top = 388.0
 margin_right = 994.0
 margin_bottom = 582.0
 
+[node name="Ready" type="Button" parent="."]
+margin_left = 868.0
+margin_top = 534.0
+margin_right = 983.0
+margin_bottom = 582.0
+text = "Ready"
+
 [connection signal="button_down" from="Button" to="." method="_on_Button_button_down"]
 [connection signal="button_down" from="Button2" to="." method="_on_Button2_button_down"]
+[connection signal="button_down" from="Button4" to="." method="_on_LeaveLobby_button_down"]
 [connection signal="button_down" from="Button3" to="." method="_on_Button3_button_down"]
 [connection signal="button_down" from="Control/Send Chat Message" to="." method="_on_Send_Chat_Message_button_down"]
+[connection signal="button_down" from="Ready" to="." method="_on_Ready_button_down"]
