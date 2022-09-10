@@ -5,8 +5,6 @@ VisualStudioVersion = 17.2.32602.215
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CSharpSteamworks", "CSharpSteamworks.csproj", "{D36E7B0A-DFA3-4557-A37C-5E763F5D544C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Facepunch.Steamworks.Win64", "..\GitHub\Facepunch.Steamworks\Facepunch.Steamworks\Facepunch.Steamworks.Win64.csproj", "{B8FC187B-E679-4F85-95D6-7248CCF2E89D}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,14 +21,6 @@ Global
 		{D36E7B0A-DFA3-4557-A37C-5E763F5D544C}.ExportRelease|Any CPU.Build.0 = ExportRelease|Any CPU
 		{D36E7B0A-DFA3-4557-A37C-5E763F5D544C}.Release|Any CPU.ActiveCfg = ExportRelease|Any CPU
 		{D36E7B0A-DFA3-4557-A37C-5E763F5D544C}.Release|Any CPU.Build.0 = ExportRelease|Any CPU
-		{B8FC187B-E679-4F85-95D6-7248CCF2E89D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B8FC187B-E679-4F85-95D6-7248CCF2E89D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B8FC187B-E679-4F85-95D6-7248CCF2E89D}.ExportDebug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B8FC187B-E679-4F85-95D6-7248CCF2E89D}.ExportDebug|Any CPU.Build.0 = Debug|Any CPU
-		{B8FC187B-E679-4F85-95D6-7248CCF2E89D}.ExportRelease|Any CPU.ActiveCfg = Release|Any CPU
-		{B8FC187B-E679-4F85-95D6-7248CCF2E89D}.ExportRelease|Any CPU.Build.0 = Release|Any CPU
-		{B8FC187B-E679-4F85-95D6-7248CCF2E89D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B8FC187B-E679-4F85-95D6-7248CCF2E89D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
