@@ -15,6 +15,8 @@ public class SceneManager : Node2D
     public PackedScene LobbyElement;
     [Export]
     public PackedScene LobbyPlayer;
+
+    public static SceneManager manager;
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
@@ -22,6 +24,7 @@ public class SceneManager : Node2D
        // steamManager.Connect("OnLobbyRefreshCompleted", this, "OnLobbyRefreshCompleted");
         SteamManager.OnLobbyRefreshCompleted += OnLobbyRefreshCompleted;
         SteamManager.OnPlayerJoinLobby += OnPlayerJoinLobby;
+        manager = this;
     }
 
 //  // Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -35,6 +38,7 @@ public class SceneManager : Node2D
     }
 
     public void _on_Button2_button_down(){
+        ClearLobbyList();
         _ = steamManager.RefreshMultiplayerLobbies();
     }
     public void _on_Button3_button_down(){
@@ -84,6 +88,21 @@ public class SceneManager : Node2D
         foreach (var item in steamManager.activeUnrankedLobbies)
         {
             item.Leave();
+        }
+        ClearLobby();
+    }
+
+    public void ClearLobby(){
+        foreach (Node item in GetNode<VBoxContainer>("Lobby").GetChildren())
+        {
+            item.QueueFree();
+        }
+    }
+
+    public void ClearLobbyList(){
+        foreach (Node item in GetNode<VBoxContainer>("VBoxContainer").GetChildren())
+        {
+            item.QueueFree();
         }
     }
 }

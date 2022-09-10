@@ -28,6 +28,8 @@ public class LobbyElement : Control
 
     public void _on_JoinButton_button_down()
     {
+        SceneManager.manager.ClearLobby();
         lobby.Join();
+        
     }
 }
