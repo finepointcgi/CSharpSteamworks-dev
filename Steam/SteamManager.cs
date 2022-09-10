@@ -69,6 +69,14 @@ public class SteamManager : Node
         }
     }
 
+    public static void Broadcast(byte[] data)
+    {
+        foreach (Connection connection in steamSocketManager.Connected.Skip(1).ToArray())
+        {
+            connection.SendMessage(data);
+        }
+    }
+
     internal void RelaySocketMessageReceived(IntPtr data, int size, uint id)
     {
         byte[] managedArray = new byte[size];

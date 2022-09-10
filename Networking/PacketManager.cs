@@ -76,13 +76,12 @@ namespace CSharpSteamworks.Networking
             if (SteamManager.Instance.IsHost)
             {
                 // relay the message to other clients.
-                SteamManager.steamConnectionManager.SendMessages(SteamManager.steamSocketManager.Connected.ToArray(),
-                SteamManager.steamSocketManager.Connected.Count, PacketIO.PackObject(PacketTypes.ChatMessage, message));
+                SteamManager.Broadcast(PacketIO.PackObject(PacketTypes.ChatMessage, message));
             }
 
             Console.WriteLine($"{message["playerName"]} ({message["playerId"]}): {message["text"]}");
 
-            OnChatMessage.Invoke(message);
+            //OnChatMessage.Invoke(message);
         }
     }
 }

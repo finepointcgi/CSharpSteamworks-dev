@@ -74,11 +74,12 @@ public class SceneManager : Node2D
             { "text", manager.GetNode("Control").GetNode<LineEdit>("LineEdit").Text }
         };
 
-        if (steamManager.IsHost){
-         SteamManager.steamConnectionManager.SendMessages(SteamManager.steamSocketManager.Connected.ToArray(),
-                SteamManager.steamSocketManager.Connected.Count, PacketIO.PackObject(PacketTypes.ChatMessage, message));
-        }else{
-
+        if (steamManager.IsHost)
+        {
+            SteamManager.Broadcast(PacketIO.PackObject(PacketTypes.ChatMessage, message));
+        }
+        else 
+        {
             SteamManager.steamConnectionManager.Connection.SendMessage(PacketIO.PackObject(PacketTypes.ChatMessage, message));
         }
 
