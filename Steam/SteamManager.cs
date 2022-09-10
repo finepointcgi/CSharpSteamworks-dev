@@ -117,7 +117,9 @@ public class SteamManager : Node
 
     internal void ProcessMessageFromSocketServer(IntPtr data, int size)
     {
-        throw new NotImplementedException();
+        byte[] managedArray = new byte[size];
+        Marshal.Copy(data, managedArray, 0, size);
+        PacketManager.Handle(currentLobby.Owner.Id.AccountId, new Packet(managedArray));
     }
 
     public bool ConnectedToSteam()
@@ -151,7 +153,6 @@ public class SteamManager : Node
     {
         base._Process(delta);
         SteamClient.RunCallbacks();
-        SteamClient.RunCallbacks();
         try
         {
             if (steamSocketManager != null )
@@ -162,9 +163,9 @@ public class SteamManager : Node
                 steamConnectionManager.Receive();
             }
         }
-        catch
+        catch(Exception e)
         {
-            Console.WriteLine("Error receiving data on socket/connection");
+            Console.WriteLine("Error receiving data on socket/connection " + e.Message);
         }
     }
 
@@ -223,7 +224,7 @@ public class SteamManager : Node
 
             // I used chat to setup game parameters on occasion like when player joined lobby with preselected playable bug family, prob not best way to do it
             // But after host received player chat message I set off the OnLobbyGameCreated callback with lobby.SetGameServer(PlayerSteamId)
-            lobby.SetJoinable(false);
+            //lobby.SetJoinable(false);
             lobby.SetGameServer(PlayerSteamId);
             //lobby.SendChatString("We are connected!");
             Console.WriteLine(friend.Name + " has connected!");
@@ -234,7 +235,7 @@ public class SteamManager : Node
     void OnLobbyEnteredCallback(Lobby lobby)
     {
         // You joined this lobby
-        if (lobby.MemberCount != 1) // I do this because this callback triggers on host, I only wanted to use for players joining after host
+        if (lobby.MemberCount > 0) // I do this because this callback triggers on host, I only wanted to use for players joining after host
         {
             Console.WriteLine($"You joined {lobby.Owner.Name}'s lobby");
 
@@ -257,7 +258,7 @@ public class SteamManager : Node
         RoomEnter joinedLobbySuccess = await joinedLobby.Join();
         if (joinedLobbySuccess != RoomEnter.Success)
         {
-            Console.WriteLine("failed to join lobby");
+            Console.WriteLine("failed to join lobby " + joinedLobbySuccess.ToString());
         }
         else
         {

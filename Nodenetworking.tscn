@@ -75,8 +75,9 @@ text = "Send"
 [node name="RichTextLabel" type="RichTextLabel" parent="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 239.0
+margin_left = -13.0
 margin_bottom = -52.0
+bbcode_enabled = true
 
 [node name="Lobby" type="VBoxContainer" parent="."]
 margin_left = 529.0

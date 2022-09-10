@@ -29,12 +29,12 @@ namespace CSharpSteamworks.Networking
                 }
                 else
                 {
-                    Console.WriteLine($"Received unknown packet with id ({id}).");
+                    Console.WriteLine($"Received unknown packet with id ({id}). Try parse failed.");
                 }
             }
-            catch(Exception)
+            catch(Exception e)
             {
-                Console.WriteLine($"Received unknown packet with id ({id}).");
+                Console.WriteLine($"Received unknown packet with id ({id}). " + e.Message);
             }
         }
 
@@ -81,7 +81,7 @@ namespace CSharpSteamworks.Networking
 
             Console.WriteLine($"{message["playerName"]} ({message["playerId"]}): {message["text"]}");
 
-            //OnChatMessage.Invoke(message);
+            OnChatMessage.Invoke(message);
         }
     }
 }

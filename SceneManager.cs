@@ -26,6 +26,7 @@ public class SceneManager : Node2D
         SteamManager.OnLobbyRefreshCompleted += OnLobbyRefreshCompleted;
         SteamManager.OnPlayerJoinLobby += OnPlayerJoinLobby;
         PacketManager.OnPlayerReady += OnPlayerReady;
+        PacketManager.OnChatMessage += OnChatMessage;
         manager = this;
     }
 
@@ -139,5 +140,9 @@ public class SceneManager : Node2D
         Console.WriteLine(playerDict);
         Console.WriteLine(playerDict["playername"]);
         Console.WriteLine(playerDict["isReady"]);
+    }
+
+    private void OnChatMessage(Dictionary<string, string> dict){
+        GetNode<RichTextLabel>("Control/RichTextLabel").Text = GetNode<RichTextLabel>("Control/RichTextLabel").Text + System.Environment.NewLine + dict["playerName"] + ": " + dict["text"];
     }
 }
