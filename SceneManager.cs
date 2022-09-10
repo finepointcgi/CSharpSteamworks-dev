@@ -85,6 +85,8 @@ public class SceneManager : Node2D
         }
 
         lineEdit.Text = string.Empty;
+
+        OnChatMessage(message);
     }
 
     private void OnPlayerJoinLobby(string friend){
