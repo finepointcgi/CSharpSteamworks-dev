@@ -22,6 +22,7 @@ public class LobbyElement : Control
 
     public void SetLabels(string id, string name)
     {
+        
         GetNode<RichTextLabel>("Lobby Name").Text = name;
         GetNode<RichTextLabel>("ID").Text = id;
     }

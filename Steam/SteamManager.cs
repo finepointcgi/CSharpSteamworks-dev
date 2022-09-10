@@ -14,23 +14,15 @@ public class SteamManager : Node
     private static uint gameAppId { get; set; } = 2145350;
     public string PlayerName { get; set; }
     public SteamId PlayerSteamId { get; set; }
-    private string playerSteamIdString { get; set; }
-    public string PlayerSteamIdString { get => playerSteamIdString; }
+    public string PlayerSteamIdString { get; set; }
     private bool connectedToSteam { get; set; } = false;
-    private Friend lobbyPartner { get; set; }
-    public Friend LobbyPartner { get => lobbyPartner; set => lobbyPartner = value; }
     public SteamId OpponentSteamId { get; set; }
     public bool LobbyPartnerDisconnected { get; set; }
     public List<Lobby> activeUnrankedLobbies { get; set; }
     public List<Lobby> activeRankedLobbies { get; set; }
     public Lobby currentLobby { get; set; }
     private Lobby hostedMultiplayerLobby { get; set; }
-    private bool applicationHasQuit { get; set; } = false;
-    private bool daRealOne { get; set; } = false;
-    public string PlayerEloDataString { get; set; } = "";
-    public int PlayerElo { get; set; } = 0;
     public bool IsHost => currentLobby.IsOwnedBy(PlayerSteamId);
-
     public static SteamSocketManager steamSocketManager { get; set; }
     public static SteamConnectionManager steamConnectionManager { get; set; }
 
@@ -43,7 +35,6 @@ public class SteamManager : Node
     {
         if (Instance == null)
         {
-            daRealOne = true;
             
             Instance = this;
             PlayerName = "";
@@ -60,7 +51,7 @@ public class SteamManager : Node
 
                 PlayerName = SteamClient.Name;
                 PlayerSteamId = SteamClient.SteamId;
-                playerSteamIdString = PlayerSteamId.ToString();
+                PlayerSteamIdString = PlayerSteamId.ToString();
                 activeUnrankedLobbies = new List<Lobby>();
                 activeRankedLobbies = new List<Lobby>();
                 connectedToSteam = true;
@@ -69,7 +60,7 @@ public class SteamManager : Node
             catch (Exception e)
             {
                 connectedToSteam = false;
-                playerSteamIdString = "NoSteamId";
+                PlayerSteamIdString = "NoSteamId";
                 Console.WriteLine("Error connecting to Steam");
                 Console.WriteLine(e);
             }
@@ -168,25 +159,12 @@ public class SteamManager : Node
     public override void _Notification(int what)
     {
         if (what == MainLoop.NotificationWmQuitRequest){
-            if (daRealOne)
-            {
-                gameCleanup();
-            }
+            leaveLobby();
+            SteamClient.Shutdown();
             GetTree().Quit(); // default behavior
         }
     }
     
-
-    // Place where you can update saves, etc. on sudden game quit as well
-    private void gameCleanup()
-    {
-        if (!applicationHasQuit)
-        {
-            applicationHasQuit = true;
-            leaveLobby();
-            SteamClient.Shutdown();
-        }
-    }
 
     void OnLobbyMemberDisconnectedCallback(Lobby lobby, Friend friend)
     {
@@ -271,17 +249,8 @@ public class SteamManager : Node
         }
         else
         {
-            // This was hacky, I didn't have clean way of getting lobby host steam id when joining lobby from game invite from friend 
-            foreach (Friend friend in SteamFriends.GetFriends())
-            {
-                if (friend.Id == id)
-                {
-                    lobbyPartner = friend;
-                    break;
-                }
-            }
+           
             currentLobby = joinedLobby;
-            OpponentSteamId = id;
             LobbyPartnerDisconnected = false;
             
             foreach (Friend friend in joinedLobby.Members){
@@ -309,12 +278,6 @@ public class SteamManager : Node
     {
         // The lobby member joined
         Console.WriteLine("someone else joined lobby");
-        if (friend.Id != PlayerSteamId)
-        {
-            LobbyPartner = friend;
-            OpponentSteamId = friend.Id;
-            LobbyPartnerDisconnected = false;
-        }
         OnPlayerJoinLobby.Invoke(friend.Name);
     }
 
@@ -328,37 +291,20 @@ public class SteamManager : Node
     {
         try
         {
-            if (ranked)
+            activeUnrankedLobbies.Clear();
+            Lobby[] lobbies = await SteamMatchmaking.LobbyList.WithMaxResults(20).RequestAsync();
+            if (lobbies != null)
             {
-                activeRankedLobbies.Clear();
-                Lobby[] lobbies = await SteamMatchmaking.LobbyList.WithMaxResults(20).WithKeyValue("isRankedData", "TRUE").OrderByNear(PlayerEloDataString, PlayerElo).RequestAsync();
-                if (lobbies != null)
+                foreach (Lobby lobby in lobbies.ToList())
                 {
-                    foreach (Lobby lobby in lobbies.ToList())
-                    {
-                        activeRankedLobbies.Add(lobby);
-                    }
+                    activeUnrankedLobbies.Add(lobby);
                 }
-                EmitSignal(nameof(OnLobbyRefreshCompleted), lobbies.ToList());
-                GD.Print(activeRankedLobbies);
-                return true;
             }
-            else
-            {
-                activeUnrankedLobbies.Clear();
-                Lobby[] lobbies = await SteamMatchmaking.LobbyList.WithMaxResults(20).RequestAsync();//.WithKeyValue("isRankedData", "FALSE").RequestAsync();
-                if (lobbies != null)
-                {
-                    foreach (Lobby lobby in lobbies.ToList())
-                    {
-                        activeUnrankedLobbies.Add(lobby);
-                    }
-                }
                 
-                GD.Print(activeUnrankedLobbies);
-                OnLobbyRefreshCompleted.Invoke(lobbies.ToList());
-                return true;
-            }
+            GD.Print(activeUnrankedLobbies);
+            OnLobbyRefreshCompleted.Invoke(lobbies.ToList());
+            return true;
+            
         }
         catch (Exception e)
         {

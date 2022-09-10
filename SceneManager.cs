@@ -66,6 +66,7 @@ public class SceneManager : Node2D
 
     private void OnPlayerJoinLobby(string friend){
         var element = LobbyPlayer.Instance() as LobbyPlayer;
+        element.Name = friend;
         element.SetPlayerInfo(friend);
         GetNode<VBoxContainer>("Lobby").AddChild(element);
     }
