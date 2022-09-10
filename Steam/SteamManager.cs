@@ -1,5 +1,4 @@
-﻿
-using Steamworks;
+﻿using Steamworks;
 using Steamworks.Data;
 using System;
 using System.Collections;
@@ -30,6 +29,10 @@ public class SteamManager : Node
     private bool daRealOne { get; set; } = false;
     public string PlayerEloDataString { get; set; } = "";
     public int PlayerElo { get; set; } = 0;
+    public bool IsHost => currentLobby.IsOwnedBy(PlayerSteamId);
+
+    public static SteamSocketManager steamSocketManager { get; set; }
+    public static SteamConnectionManager steamConnectionManager { get; set; }
 
     public static event Action<List<Lobby>> OnLobbyRefreshCompleted;
     public static event Action<string> OnPlayerJoinLobby;
@@ -200,23 +203,7 @@ public class SteamManager : Node
     void OnLobbyGameCreatedCallback(Lobby lobby, uint ip, ushort port, SteamId steamId)
     {
         Console.WriteLine("firing callback for on lobby game created.");
-        AcceptP2P(OpponentSteamId);
         //SceneManager.LoadScene("SceneToLoad");
-    }
-
-    private void AcceptP2P(SteamId opponentId)
-    {
-        try
-        {
-            
-            
-            // For two players to send P2P packets to each other, they each must call this on the other player
-            //SteamNetworking.AcceptP2PSessionWithUser(opponentId);
-        }
-        catch
-        {
-            Console.WriteLine("Unable to accept P2P Session with user");
-        }
     }
 
     void OnChatMessageCallback(Lobby lobby, Friend friend, string message)
@@ -231,7 +218,7 @@ public class SteamManager : Node
             // But after host received player chat message I set off the OnLobbyGameCreated callback with lobby.SetGameServer(PlayerSteamId)
             lobby.SetJoinable(false);
             lobby.SetGameServer(PlayerSteamId);
-            lobby.SendChatString("We are connected!");
+            //lobby.SendChatString("We are connected!");
             Console.WriteLine(friend.Name + " has connected!");
         }
     }
@@ -242,13 +229,14 @@ public class SteamManager : Node
         // You joined this lobby
         if (lobby.MemberCount != 1) // I do this because this callback triggers on host, I only wanted to use for players joining after host
         {
-            // You will need to have gotten OpponentSteamId from various methods before (lobby data, joined invite, etc)
-            AcceptP2P(OpponentSteamId);
+            Console.WriteLine($"You joined {lobby.Owner.Name}'s lobby");
 
             // Examples of things to do
             lobby.SendChatString("incoming player info");
             string v = lobby.GetData("isFriendLobby");
             Console.Write(v);
+
+            JoinSteamSocketServer(lobby.Owner.Id);
         }
     }
 
@@ -275,7 +263,7 @@ public class SteamManager : Node
             currentLobby = joinedLobby;
             OpponentSteamId = id;
             LobbyPartnerDisconnected = false;
-            AcceptP2P(OpponentSteamId);
+
             //SceneManager.LoadScene("Scene to load");
         }
     }
@@ -289,6 +277,8 @@ public class SteamManager : Node
             Console.WriteLine("lobby creation result not ok");
             Console.WriteLine(result.ToString());
         }
+
+        CreateSteamSocketServer();
     }
 
     void OnLobbyMemberJoinedCallback(Lobby lobby, Friend friend)
@@ -299,7 +289,6 @@ public class SteamManager : Node
         {
             LobbyPartner = friend;
             OpponentSteamId = friend.Id;
-            AcceptP2P(OpponentSteamId);
             LobbyPartnerDisconnected = false;
         }
         OnPlayerJoinLobby.Invoke(friend.Name);
@@ -424,14 +413,12 @@ public class SteamManager : Node
             hostedMultiplayerLobby.SetJoinable(true);
             //hostedMultiplayerLobby.SetData("staticDataString", lobbyParameters.ToString());
 
-
             currentLobby = hostedMultiplayerLobby;
             Console.WriteLine("Lobby was created");
             //var friend = new Friend();
             //friend. = PlayerName;
             OnPlayerJoinLobby(PlayerName);
-            SteamSockets s = new SteamSockets();
-            s.CreateSteamSocketServer();
+
             return true;
         }
         catch (Exception exception)
@@ -508,5 +495,23 @@ public class SteamManager : Node
             }
         }
     }
-}
 
+    public void CreateSteamSocketServer()
+    {
+        steamSocketManager = SteamNetworkingSockets.CreateRelaySocket<SteamSocketManager>(0);
+        // Host needs to connect to own socket server with a ConnectionManager to send/receive messages
+        // Relay Socket servers are created/connected to through SteamIds rather than "Normal" Socket Servers which take IP addresses
+        steamConnectionManager = SteamNetworkingSockets.ConnectRelay<SteamConnectionManager>(PlayerSteamId);
+
+        Console.WriteLine("created socket server!");
+    }
+
+    public void JoinSteamSocketServer(SteamId host)
+    {
+        if (!IsHost)
+        {
+            Console.WriteLine("joining socket server");
+            steamConnectionManager = SteamNetworkingSockets.ConnectRelay<SteamConnectionManager>(host, 0);
+        }
+    }
+}

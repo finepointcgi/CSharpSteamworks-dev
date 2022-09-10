@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using Steamworks.Data;
 using Steamworks;
+using System.Linq;
 
 public class SceneManager : Node2D
 {
@@ -51,7 +52,12 @@ public class SceneManager : Node2D
     }
 
     private void _on_Send_Chat_Message_button_down(){
-        
+        if(steamManager.IsHost){
+         SteamManager.steamConnectionManager.SendMessages(SteamManager.steamSocketManager.Connected.ToArray(),
+                SteamManager.steamSocketManager.Connected.Count, "test");
+        }else{
+            SteamManager.steamConnectionManager.Connection.SendMessage("test");
+        }
     }
 
     private void OnPlayerJoinLobby(string friend){
