@@ -25,6 +25,7 @@ public class SceneManager : Node2D
        // steamManager.Connect("OnLobbyRefreshCompleted", this, "OnLobbyRefreshCompleted");
         SteamManager.OnLobbyRefreshCompleted += OnLobbyRefreshCompleted;
         SteamManager.OnPlayerJoinLobby += OnPlayerJoinLobby;
+        PacketManager.OnPlayerReady += OnPlayerReady;
         manager = this;
     }
 
@@ -107,5 +108,12 @@ public class SceneManager : Node2D
         {
             item.QueueFree();
         }
+    }
+
+    private void OnPlayerReady(Dictionary<string, string> playerDict)
+    {
+        Console.WriteLine(playerDict);
+        Console.WriteLine(playerDict["playername"]);
+        Console.WriteLine(playerDict["isReady"]);
     }
 }

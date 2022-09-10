@@ -5,7 +5,8 @@ namespace CSharpSteamworks.Networking
 {
     public class PacketManager
     {
-        public delegate void PacketHandler(int senderId, Packet packet);
+        public delegate void PacketHandler(uint senderId, Packet packet);
+        public static event Action<Dictionary<string, string>> OnPlayerReady;
 
         public static Dictionary<PacketTypes, PacketHandler> Handlers = new Dictionary<PacketTypes, PacketHandler>()
         {
@@ -13,7 +14,7 @@ namespace CSharpSteamworks.Networking
             { PacketTypes.GuestReady, GuestReady }
         };
 
-        public void Handle(int senderId, Packet packet)
+        public static void Handle(uint senderId, Packet packet)
         {
             int id = packet.ReadInt();
 
@@ -34,23 +35,32 @@ namespace CSharpSteamworks.Networking
             }
         }
 
-        public static void HostStartGame(int senderId, Packet packet)
+        public static void HostStartGame(uint senderId, Packet packet)
         {
             // return here if host.
 
-            Console.WriteLine($"Received a 'HostStartGame' packet.");
+            if (!SteamManager.Instance.IsHost)
+            {
+                Console.WriteLine($"Received a 'HostStartGame' packet.");
 
-            bool isReady = PacketIO.UnpackObject<bool>(packet);
+                bool isReady = PacketIO.UnpackObject<bool>(packet);
+            }
+            else
+            {
+                Console.WriteLine("Recieved host packet from non host!");
+            }
+            
             // send current player into game.
         }
 
-        public static void GuestReady(int senderId, Packet packet)
+        public static void GuestReady(uint senderId, Packet packet)
         {
             // return here if not host.
 
             Console.WriteLine($"Received a 'GuestReady' packet.");
 
-            bool isReady = PacketIO.UnpackObject<bool>(packet);
+            Dictionary<string, string> ReadyPlayer = PacketIO.UnpackObject<Dictionary<string, string>>(packet);
+            OnPlayerReady.Invoke(ReadyPlayer);
             // set ready state of this player.
         }
     }

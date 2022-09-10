@@ -7,6 +7,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Godot;
 using CSharpSteamworks.Steam;
+using System.Runtime.InteropServices;
+using CSharpSteamworks.Networking;
 
 public class SteamManager : Node
 {
@@ -69,7 +71,9 @@ public class SteamManager : Node
 
     internal void RelaySocketMessageReceived(IntPtr data, int size, uint id)
     {
-        throw new NotImplementedException();
+        byte[] managedArray = new byte[size];
+        Marshal.Copy(data, managedArray, 0, size);
+        PacketManager.Handle(id, new Packet(managedArray));
     }
 
     public bool TryToReconnectToSteam()
