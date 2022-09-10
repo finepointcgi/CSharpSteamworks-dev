@@ -94,7 +94,7 @@ public class SceneManager : Node2D
         {
             foreach (Lobby lobby in lobbies.ToList())
             {
-                lobby.Leave
+                lobby.Leave();
             }
         }
         ClearLobby();
