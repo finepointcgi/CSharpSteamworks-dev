@@ -167,12 +167,13 @@ public class SteamManager : Node
 
     public override void _Notification(int what)
     {
-        if (what == MainLoop.NotificationWmQuitRequest)
+        if (what == MainLoop.NotificationWmQuitRequest){
             if (daRealOne)
             {
                 gameCleanup();
             }
-        GetTree().Quit(); // default behavior
+            GetTree().Quit(); // default behavior
+        }
     }
     
 
@@ -251,7 +252,10 @@ public class SteamManager : Node
             lobby.SendChatString("incoming player info");
             string v = lobby.GetData("isFriendLobby");
             Console.Write(v);
-
+            foreach (var item in lobby.Members)
+            {
+                OnPlayerJoinLobby(item.Name);
+            }
             JoinSteamSocketServer(lobby.Owner.Id);
         }
     }
@@ -374,14 +378,7 @@ public class SteamManager : Node
         {
             Console.WriteLine("Error leaving current lobby");
         }
-        try
-        {
-            SteamNetworking.CloseP2PSessionWithUser(OpponentSteamId);
-        }
-        catch
-        {
-            Console.WriteLine("Error closing P2P session with opponent");
-        }
+        
     }
 
     public async Task<bool> CreateFriendLobby()

@@ -45,7 +45,7 @@ public class SceneManager : Node2D
         foreach (var lobby in lobbies)
         {
             var element = LobbyElement.Instance() as LobbyElement;
-            element.SetLabels(lobby.Id.ToString(), lobby.Owner.Name);
+            element.SetLabels(lobby.Id.ToString(), lobby.GetData("ownerNameDataString"));
             element.lobby = lobby;
             GetNode<VBoxContainer>("VBoxContainer").AddChild(element);
         }
