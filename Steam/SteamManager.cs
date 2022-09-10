@@ -302,6 +302,7 @@ public class SteamManager : Node
                 foreach (Lobby lobby in lobbies.ToList())
                 {
                     activeUnrankedLobbies.Add(lobby);
+                    lobby.Leave();
                 }
             }
                 
