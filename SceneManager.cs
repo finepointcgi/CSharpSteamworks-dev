@@ -89,9 +89,13 @@ public class SceneManager : Node2D
     }
 
     private void _on_LeaveLobby_button_down(){
-        foreach (var item in steamManager.activeUnrankedLobbies)
+        Lobby[] lobbies = SteamMatchmaking.LobbyList.WithMaxResults(20).RequestAsync().Result;
+        if (lobbies != null)
         {
-            item.Leave();
+            foreach (Lobby lobby in lobbies.ToList())
+            {
+                lobby.Leave
+            }
         }
         ClearLobby();
     }

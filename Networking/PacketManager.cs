@@ -43,7 +43,7 @@ namespace CSharpSteamworks.Networking
             {
                 Console.WriteLine($"Received a 'HostStartGame' packet.");
 
-                bool isReady = PacketIO.UnpackObject<bool>(packet);
+                Dictionary<string, string> isReady = PacketIO.UnpackObject<Dictionary<string, string>>(packet);
             }
             else
             {

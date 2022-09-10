@@ -366,7 +366,7 @@ public class SteamManager : Node
         try
         {
             Console.WriteLine("Creating Lobby");
-            var createLobbyOutput = await SteamMatchmaking.CreateLobbyAsync(2);
+            var createLobbyOutput = await SteamMatchmaking.CreateLobbyAsync(20);
             
             if (!createLobbyOutput.HasValue)
             {
