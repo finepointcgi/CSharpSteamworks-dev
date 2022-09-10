@@ -49,7 +49,7 @@ margin_bottom = 289.0
 custom_constants/separation = 0
 
 [node name="Control" type="Control" parent="."]
-margin_left = 527.0
+margin_left = 720.0
 margin_top = 52.0
 margin_right = 972.0
 margin_bottom = 376.0
@@ -57,8 +57,9 @@ margin_bottom = 376.0
 [node name="LineEdit" type="LineEdit" parent="Control"]
 anchor_top = 1.0
 anchor_bottom = 1.0
+margin_left = -2.0
 margin_top = -38.0
-margin_right = 304.0
+margin_right = 103.0
 
 [node name="Send Chat Message" type="Button" parent="Control"]
 anchor_left = 1.0
@@ -74,6 +75,7 @@ text = "Send"
 [node name="RichTextLabel" type="RichTextLabel" parent="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
+margin_left = 239.0
 margin_bottom = -52.0
 
 [node name="Lobby" type="VBoxContainer" parent="."]
