@@ -57,13 +57,32 @@ public class SceneManager : Node2D
         }
     }
 
-    private void _on_Send_Chat_Message_button_down(){
-        if(steamManager.IsHost){
-         SteamManager.steamConnectionManager.SendMessages(SteamManager.steamSocketManager.Connected.ToArray(),
-                SteamManager.steamSocketManager.Connected.Count, "test");
-        }else{
-            SteamManager.steamConnectionManager.Connection.SendMessage("test");
+    private void _on_Send_Chat_Message_button_down()
+    {
+        LineEdit lineEdit = manager.GetNode("Control").GetNode<LineEdit>("LineEdit");
+
+        if(lineEdit.Text == null || lineEdit.Text.Trim().Length == 0)
+        {
+            lineEdit.Text = string.Empty;
+            return;
         }
+
+        Dictionary<string, string> message = new Dictionary<string, string>()
+        {
+            { "playerId", steamManager.PlayerSteamId.ToString() },
+            { "playerName", steamManager.PlayerName },
+            { "text", manager.GetNode("Control").GetNode<LineEdit>("LineEdit").Text }
+        };
+
+        if (steamManager.IsHost){
+         SteamManager.steamConnectionManager.SendMessages(SteamManager.steamSocketManager.Connected.ToArray(),
+                SteamManager.steamSocketManager.Connected.Count, PacketIO.PackObject(PacketTypes.ChatMessage, message));
+        }else{
+
+            SteamManager.steamConnectionManager.Connection.SendMessage(PacketIO.PackObject(PacketTypes.ChatMessage, message));
+        }
+
+        lineEdit.Text = string.Empty;
     }
 
     private void OnPlayerJoinLobby(string friend){

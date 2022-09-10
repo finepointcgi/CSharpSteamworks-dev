@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace CSharpSteamworks.Networking
 {
@@ -7,11 +8,13 @@ namespace CSharpSteamworks.Networking
     {
         public delegate void PacketHandler(uint senderId, Packet packet);
         public static event Action<Dictionary<string, string>> OnPlayerReady;
+        public static event Action<Dictionary<string, string>> OnChatMessage;
 
         public static Dictionary<PacketTypes, PacketHandler> Handlers = new Dictionary<PacketTypes, PacketHandler>()
         {
             { PacketTypes.HostStartGame, HostStartGame },
-            { PacketTypes.GuestReady, GuestReady }
+            { PacketTypes.GuestReady, GuestReady },
+            { PacketTypes.ChatMessage, ChatMessage }
         };
 
         public static void Handle(uint senderId, Packet packet)
@@ -62,6 +65,24 @@ namespace CSharpSteamworks.Networking
             Dictionary<string, string> ReadyPlayer = PacketIO.UnpackObject<Dictionary<string, string>>(packet);
             OnPlayerReady.Invoke(ReadyPlayer);
             // set ready state of this player.
+        }
+
+        public static void ChatMessage(uint senderId, Packet packet)
+        {
+            Console.WriteLine($"Received a 'ChatMessage' packet.");
+
+            Dictionary<string, string> message = PacketIO.UnpackObject<Dictionary<string, string>>(packet);
+
+            if (SteamManager.Instance.IsHost)
+            {
+                // relay the message to other clients.
+                SteamManager.steamConnectionManager.SendMessages(SteamManager.steamSocketManager.Connected.ToArray(),
+                SteamManager.steamSocketManager.Connected.Count, PacketIO.PackObject(PacketTypes.ChatMessage, message));
+            }
+
+            Console.WriteLine($"{message["playerName"]} ({message["playerId"]}): {message["text"]}");
+
+            OnChatMessage.Invoke(message);
         }
     }
 }
