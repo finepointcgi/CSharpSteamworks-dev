@@ -30,6 +30,8 @@ public class SceneManager : Node2D
         PacketManager.OnPlayerReady += OnPlayerReady;
         PacketManager.OnChatMessage += OnChatMessage;
         manager = this;
+        GameManager gameManager = new GameManager();
+
     }
 
 //  // Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -97,10 +99,12 @@ public class SceneManager : Node2D
         element.Name = friend.Id.AccountId.ToString();
         element.SetPlayerInfo(friend.Name);
         GetNode<VBoxContainer>("Lobby").AddChild(element);
+        GameManager.OnPlayerJoinedLobby(friend);
     }
 
     private void OnPlayerLeftLobby(Friend player){
         GetNode<LobbyPlayer>($"Lobby/{player.Id.AccountId.ToString()}").QueueFree();
+        GameManager.OnPlayerLeftLobby(player);
     }
 
     private void _on_Ready_button_down(){
@@ -149,6 +153,7 @@ public class SceneManager : Node2D
         GD.Print(playerDict);
         GD.Print(playerDict["playername"]);
         GD.Print(playerDict["isReady"]);
+        GameManager.OnPlayerReady(playerDict);
     }
 
     private void OnChatMessage(Dictionary<string, string> dict){

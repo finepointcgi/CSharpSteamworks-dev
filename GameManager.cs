@@ -5,21 +5,21 @@ using Steamworks;
 using System.Linq;
 using CSharpSteamworks.Networking;
 
-public class GameManager : Node
+public class GameManager
 {
     // Declare member variables here. Examples:
     // private int a = 2;
     // private string b = "text";
     public static GameManager Manager;
-    private List<Player> CurrentPlayers;
+    public static List<Player> CurrentPlayers = new List<Player>();
 
     // Called when the node enters the scene tree for the first time.
-    public override void _Ready()
+    public GameManager()
     {
         GameManager.Manager = this;
-        SteamManager.OnPlayerJoinLobby += OnPlayerJoinedLobby;
-        SteamManager.OnPlayerLeftLobby += OnPlayerLeftLobby;
-        PacketManager.OnPlayerReady += OnPlayerReady;
+        //SteamManager.OnPlayerJoinLobby += OnPlayerJoinedLobby;
+        //SteamManager.OnPlayerLeftLobby += OnPlayerLeftLobby;
+        //PacketManager.OnPlayerReady += OnPlayerReady;
     }
 
 //  // Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -28,18 +28,19 @@ public class GameManager : Node
 //      
 //  }
 
-    public void OnPlayerJoinedLobby(Friend player){
+    public static void OnPlayerJoinedLobby(Friend player){
         Player p  = new Player();
         p.FriendData = player;
         CurrentPlayers.Add(p);
     }
 
-    public void OnPlayerLeftLobby(Friend player){
+    public static void OnPlayerLeftLobby(Friend player){
         CurrentPlayers.Remove(CurrentPlayers.Where(x => x.FriendData.Id.AccountId == player.Id.AccountId).FirstOrDefault());
     }
 
 
-    public void OnPlayerReady(Dictionary<string, string> dict){
+    public static void OnPlayerReady(Dictionary<string, string> dict){
+        var v = CurrentPlayers;
         Player currentFriend = CurrentPlayers.Where(x => x.FriendData.Id.AccountId.ToString() == dict["playername"]).FirstOrDefault();
         currentFriend.isReady = dict["isReady"] == "true" ? true : false;
         if(SteamManager.Instance.IsHost){

@@ -398,7 +398,7 @@ public class SteamManager : Node
             currentLobby = hostedMultiplayerLobby;
             GD.Print("Lobby was created");
 
-            OnPlayerJoinLobby(currentLobby.Members.ToList()[0]);
+            //OnPlayerJoinLobby(currentLobby.Members.ToList()[0]);
 
             return true;
         }
