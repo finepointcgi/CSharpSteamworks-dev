@@ -7,7 +7,7 @@ public class Player : KinematicBody2D
     // private int a = 2;
     // private string b = "text";
 	public Friend FriendData;
-
+	public bool isReady;
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
