@@ -73,7 +73,7 @@ public class SteamManager : Node
         if (SteamManager.Instance.IsHost)
         {
             // relay the message to other clients.
-            foreach (Connection connection in steamSocketManager.Connected.Skip(1).ToArray())
+            foreach (Connection connection in steamSocketManager.Connected.ToArray())
             {
                 connection.SendMessage(data);
             }
