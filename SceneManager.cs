@@ -18,6 +18,7 @@ public class SceneManager : Node2D
     public PackedScene LobbyPlayer;
 
     public static SceneManager manager;
+    private bool playerReady;
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
@@ -25,6 +26,7 @@ public class SceneManager : Node2D
        // steamManager.Connect("OnLobbyRefreshCompleted", this, "OnLobbyRefreshCompleted");
         SteamManager.OnLobbyRefreshCompleted += OnLobbyRefreshCompleted;
         SteamManager.OnPlayerJoinLobby += OnPlayerJoinLobby;
+        SteamManager.OnPlayerLeftLobby += OnPlayerLeftLobby;
         PacketManager.OnPlayerReady += OnPlayerReady;
         PacketManager.OnChatMessage += OnChatMessage;
         manager = this;
@@ -89,18 +91,22 @@ public class SceneManager : Node2D
         OnChatMessage(message);
     }
 
-    private void OnPlayerJoinLobby(string friend){
+    private void OnPlayerJoinLobby(Friend friend){
         var element = LobbyPlayer.Instance() as LobbyPlayer;
-        element.Name = friend;
-        element.SetPlayerInfo(friend);
+        element.Name = friend.Name;
+        element.SetPlayerInfo(friend.Name);
         GetNode<VBoxContainer>("Lobby").AddChild(element);
     }
 
+    private void OnPlayerLeftLobby(Friend player){
+        GetNode<LobbyPlayer>($"Lobby/{player.Name}").QueueFree();
+    }
+
     private void _on_Ready_button_down(){
-        
+        playerReady = !playerReady;
         Dictionary<string, string> playerDict = new Dictionary<string, string>();
         playerDict.Add("playername", steamManager.PlayerSteamId.Value.ToString());
-        playerDict.Add("isReady", "true");
+        playerDict.Add("isReady", playerReady ? "true" : "false");
 
         if (steamManager.IsHost){
            

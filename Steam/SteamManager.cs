@@ -18,7 +18,6 @@ public class SteamManager : Node
     public SteamId PlayerSteamId { get; set; }
     public string PlayerSteamIdString { get; set; }
     private bool connectedToSteam { get; set; } = false;
-    public SteamId OpponentSteamId { get; set; }
     public bool LobbyPartnerDisconnected { get; set; }
     public List<Lobby> activeUnrankedLobbies { get; set; }
     public List<Lobby> activeRankedLobbies { get; set; }
@@ -27,9 +26,9 @@ public class SteamManager : Node
     public bool IsHost => currentLobby.IsOwnedBy(PlayerSteamId);
     public static SteamSocketManager steamSocketManager { get; set; }
     public static SteamConnectionManager steamConnectionManager { get; set; }
-
     public static event Action<List<Lobby>> OnLobbyRefreshCompleted;
-    public static event Action<string> OnPlayerJoinLobby;
+    public static event Action<Friend> OnPlayerJoinLobby;
+    public static event Action<Friend> OnPlayerLeftLobby;
     //[Signal]
     //delegate void OnLobbyRefreshCompleted(List<Lobby> lobbies);
 
@@ -202,7 +201,7 @@ public class SteamManager : Node
             LobbyPartnerDisconnected = true;
             try
             {
-                SteamNetworking.CloseP2PSessionWithUser(friend.Id);
+                OnPlayerLeftLobby(friend);
                 // Handle game / UI changes that need to happen when other player leaves
             }
             catch
@@ -250,7 +249,7 @@ public class SteamManager : Node
             Console.Write(v);
             foreach (var item in lobby.Members)
             {
-                OnPlayerJoinLobby(item.Name);
+                OnPlayerJoinLobby(item);
             }
             JoinSteamSocketServer(lobby.Owner.Id);
         }
@@ -272,7 +271,7 @@ public class SteamManager : Node
             LobbyPartnerDisconnected = false;
             
             foreach (Friend friend in joinedLobby.Members){
-                OnPlayerJoinLobby.Invoke(friend.Name);
+                OnPlayerJoinLobby.Invoke(friend);
             }
             
             //SceneManager.LoadScene("Scene to load");
@@ -296,7 +295,7 @@ public class SteamManager : Node
     {
         // The lobby member joined
         GD.Print("someone else joined lobby");
-        OnPlayerJoinLobby.Invoke(friend.Name);
+        OnPlayerJoinLobby.Invoke(friend);
     }
 
     void OnDlcInstalledCallback(AppId appId)
@@ -398,9 +397,8 @@ public class SteamManager : Node
 
             currentLobby = hostedMultiplayerLobby;
             GD.Print("Lobby was created");
-            //var friend = new Friend();
-            //friend. = PlayerName;
-            OnPlayerJoinLobby(PlayerName);
+
+            OnPlayerJoinLobby(currentLobby.Members.ToList()[0]);
 
             return true;
         }
