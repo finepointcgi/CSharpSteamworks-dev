@@ -41,7 +41,7 @@ public class GameManager : Node
 
     public void OnPlayerReady(Dictionary<string, string> dict){
         Player currentFriend = CurrentPlayers.Where(x => x.FriendData.Id.AccountId.ToString() == dict["playername"]).FirstOrDefault();
-        currentFriend.isReady = dict["isReady"] == "True" ? true : false;
+        currentFriend.isReady = dict["isReady"] == "true" ? true : false;
         if(SteamManager.Instance.IsHost){
             SteamManager.Broadcast(PacketIO.PackObject(PacketTypes.GuestReady, dict));
             if( CurrentPlayers.Count(x => x.isReady) == CurrentPlayers.Count){

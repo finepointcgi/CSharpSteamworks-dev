@@ -145,7 +145,7 @@ public class SceneManager : Node2D
 
     private void OnPlayerReady(Dictionary<string, string> playerDict)
     {
-        GetNode<LobbyPlayer>($"Lobby/{playerDict["playername"]}").SetReadyStatus(playerDict["isReady"] == "True" ? true : false);
+        GetNode<LobbyPlayer>($"Lobby/{playerDict["playername"]}").SetReadyStatus(playerDict["isReady"] == "true" ? true : false);
         GD.Print(playerDict);
         GD.Print(playerDict["playername"]);
         GD.Print(playerDict["isReady"]);

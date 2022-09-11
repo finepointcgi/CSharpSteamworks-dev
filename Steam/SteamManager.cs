@@ -23,7 +23,7 @@ public class SteamManager : Node
     public List<Lobby> activeRankedLobbies { get; set; }
     public Lobby currentLobby { get; set; }
     private Lobby hostedMultiplayerLobby { get; set; }
-    public bool IsHost => currentLobby.IsOwnedBy(PlayerSteamId.AccountId);
+    public bool IsHost => currentLobby.IsOwnedBy(PlayerSteamId);
     public static SteamSocketManager steamSocketManager { get; set; }
     public static SteamConnectionManager steamConnectionManager { get; set; }
     public static event Action<List<Lobby>> OnLobbyRefreshCompleted;
@@ -51,8 +51,8 @@ public class SteamManager : Node
                 }
 
                 PlayerName = SteamClient.Name;
-                PlayerSteamId = SteamClient.SteamId.AccountId;
-                PlayerSteamIdString = PlayerSteamId.AccountId.ToString();
+                PlayerSteamId = SteamClient.SteamId;
+                PlayerSteamIdString = PlayerSteamId.ToString();
                 activeUnrankedLobbies = new List<Lobby>();
                 activeRankedLobbies = new List<Lobby>();
                 connectedToSteam = true;
