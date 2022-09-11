@@ -23,7 +23,7 @@ public class SteamManager : Node
     public List<Lobby> activeRankedLobbies { get; set; }
     public Lobby currentLobby { get; set; }
     private Lobby hostedMultiplayerLobby { get; set; }
-    public bool IsHost => currentLobby.IsOwnedBy(PlayerSteamId);
+    public bool IsHost => currentLobby.IsOwnedBy(PlayerSteamId.AccountId);
     public static SteamSocketManager steamSocketManager { get; set; }
     public static SteamConnectionManager steamConnectionManager { get; set; }
     public static event Action<List<Lobby>> OnLobbyRefreshCompleted;
@@ -51,8 +51,8 @@ public class SteamManager : Node
                 }
 
                 PlayerName = SteamClient.Name;
-                PlayerSteamId = SteamClient.SteamId;
-                PlayerSteamIdString = PlayerSteamId.ToString();
+                PlayerSteamId = SteamClient.SteamId.AccountId;
+                PlayerSteamIdString = PlayerSteamId.AccountId.ToString();
                 activeUnrankedLobbies = new List<Lobby>();
                 activeRankedLobbies = new List<Lobby>();
                 connectedToSteam = true;
@@ -103,7 +103,7 @@ public class SteamManager : Node
             }
 
             PlayerName = SteamClient.Name;
-            PlayerSteamId = SteamClient.SteamId;
+            PlayerSteamId = SteamClient.SteamId.AccountId;
             activeUnrankedLobbies = new List<Lobby>();
             activeRankedLobbies = new List<Lobby>();
             GD.Print("Steam initialized: " + PlayerName);
@@ -195,7 +195,7 @@ public class SteamManager : Node
 
     private void OtherLobbyMemberLeft(Friend friend)
     {
-        if (friend.Id != PlayerSteamId)
+        if (friend.Id.AccountId != PlayerSteamId.AccountId)
         {
             GD.Print("Opponent has left the lobby");
             LobbyPartnerDisconnected = true;
@@ -221,7 +221,7 @@ public class SteamManager : Node
     void OnChatMessageCallback(Lobby lobby, Friend friend, string message)
     {
         // Received chat message
-        if (friend.Id != PlayerSteamId)
+        if (friend.Id.AccountId != PlayerSteamId.AccountId)
         {
             GD.Print("incoming chat message");
             GD.Print(message);
@@ -229,7 +229,7 @@ public class SteamManager : Node
             // I used chat to setup game parameters on occasion like when player joined lobby with preselected playable bug family, prob not best way to do it
             // But after host received player chat message I set off the OnLobbyGameCreated callback with lobby.SetGameServer(PlayerSteamId)
             //lobby.SetJoinable(false);
-            lobby.SetGameServer(PlayerSteamId);
+            lobby.SetGameServer(PlayerSteamId.AccountId);
             //lobby.SendChatString("We are connected!");
             GD.Print(friend.Name + " has connected!");
         }
@@ -482,7 +482,7 @@ public class SteamManager : Node
         steamSocketManager = SteamNetworkingSockets.CreateRelaySocket<SteamSocketManager>(0);
         // Host needs to connect to own socket server with a ConnectionManager to send/receive messages
         // Relay Socket servers are created/connected to through SteamIds rather than "Normal" Socket Servers which take IP addresses
-        steamConnectionManager = SteamNetworkingSockets.ConnectRelay<SteamConnectionManager>(PlayerSteamId);
+        steamConnectionManager = SteamNetworkingSockets.ConnectRelay<SteamConnectionManager>(PlayerSteamId.AccountId);
 
         GD.Print("created socket server!");
     }

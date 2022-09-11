@@ -72,7 +72,7 @@ public class SceneManager : Node2D
 
         Dictionary<string, string> message = new Dictionary<string, string>()
         {
-            { "playerId", steamManager.PlayerSteamId.ToString() },
+            { "playerId", steamManager.PlayerSteamId.AccountId.ToString() },
             { "playerName", steamManager.PlayerName },
             { "text", manager.GetNode("Control").GetNode<LineEdit>("LineEdit").Text }
         };
@@ -88,7 +88,8 @@ public class SceneManager : Node2D
 
         lineEdit.Text = string.Empty;
 
-        //OnChatMessage(message);
+        if(steamManager.IsHost)
+            OnChatMessage(message);
     }
 
     private void OnPlayerJoinLobby(Friend friend){
@@ -99,17 +100,17 @@ public class SceneManager : Node2D
     }
 
     private void OnPlayerLeftLobby(Friend player){
-        GetNode<LobbyPlayer>($"Lobby/{player.Name}").QueueFree();
+        GetNode<LobbyPlayer>($"Lobby/{player.Id.AccountId.ToString()}").QueueFree();
     }
 
     private void _on_Ready_button_down(){
         playerReady = !playerReady;
         Dictionary<string, string> playerDict = new Dictionary<string, string>();
-        playerDict.Add("playername", steamManager.PlayerSteamId.Value.ToString());
+        playerDict.Add("playername", steamManager.PlayerSteamId.AccountId.ToString());
         playerDict.Add("isReady", playerReady ? "true" : "false");
 
         if (steamManager.IsHost){
-           
+           OnPlayerReady(playerDict);
          SteamManager.Broadcast(PacketIO.PackObject(PacketTypes.GuestReady, playerDict));
         }else{
             SteamManager.steamConnectionManager.Connection.SendMessage(PacketIO.PackObject(PacketTypes.GuestReady, playerDict));
@@ -144,7 +145,7 @@ public class SceneManager : Node2D
 
     private void OnPlayerReady(Dictionary<string, string> playerDict)
     {
-        GetNode<LobbyPlayer>($"Lobby/{playerDict["PlayerName"]}").SetReadyStatus(playerDict["isReady"] == "True" ? true : false);
+        GetNode<LobbyPlayer>($"Lobby/{playerDict["playername"]}").SetReadyStatus(playerDict["isReady"] == "True" ? true : false);
         GD.Print(playerDict);
         GD.Print(playerDict["playername"]);
         GD.Print(playerDict["isReady"]);

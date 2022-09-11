@@ -35,7 +35,7 @@ public class GameManager : Node
     }
 
     public void OnPlayerLeftLobby(Friend player){
-        CurrentPlayers.Remove(CurrentPlayers.Where(x => x.FriendData.Id.Value == player.Id).FirstOrDefault());
+        CurrentPlayers.Remove(CurrentPlayers.Where(x => x.FriendData.Id.Value == player.Id.Value).FirstOrDefault());
     }
 
 
