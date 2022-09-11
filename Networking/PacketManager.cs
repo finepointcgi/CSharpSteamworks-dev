@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-
+using Godot;
 namespace CSharpSteamworks.Networking
 {
     public class PacketManager
@@ -29,12 +29,12 @@ namespace CSharpSteamworks.Networking
                 }
                 else
                 {
-                    Console.WriteLine($"Received unknown packet with id ({id}). Try parse failed.");
+                    GD.Print($"Received unknown packet with id ({id}). Try parse failed.");
                 }
             }
             catch(Exception e)
             {
-                Console.WriteLine($"Received unknown packet with id ({id}). " + e.Message);
+                GD.Print($"Received unknown packet with id ({id}). " + e.Message);
             }
         }
 
@@ -44,13 +44,13 @@ namespace CSharpSteamworks.Networking
 
             if (!SteamManager.Instance.IsHost)
             {
-                Console.WriteLine($"Received a 'HostStartGame' packet.");
+                GD.Print($"Received a 'HostStartGame' packet.");
 
                 Dictionary<string, string> isReady = PacketIO.UnpackObject<Dictionary<string, string>>(packet);
             }
             else
             {
-                Console.WriteLine("Recieved host packet from non host!");
+                GD.Print("Recieved host packet from non host!");
             }
             
             // send current player into game.
@@ -60,7 +60,7 @@ namespace CSharpSteamworks.Networking
         {
             // return here if not host.
 
-            Console.WriteLine($"Received a 'GuestReady' packet.");
+            GD.Print($"Received a 'GuestReady' packet.");
 
             Dictionary<string, string> ReadyPlayer = PacketIO.UnpackObject<Dictionary<string, string>>(packet);
             OnPlayerReady.Invoke(ReadyPlayer);
@@ -69,7 +69,7 @@ namespace CSharpSteamworks.Networking
 
         public static void ChatMessage(uint senderId, Packet packet)
         {
-            Console.WriteLine($"Received a 'ChatMessage' packet.");
+            GD.Print($"Received a 'ChatMessage' packet.");
 
             Dictionary<string, string> message = PacketIO.UnpackObject<Dictionary<string, string>>(packet);
 
@@ -79,7 +79,7 @@ namespace CSharpSteamworks.Networking
                 SteamManager.Broadcast(PacketIO.PackObject(PacketTypes.ChatMessage, message));
             }
 
-            Console.WriteLine($"{message["playerName"]} ({message["playerId"]}): {message["text"]}");
+            GD.Print($"{message["playerName"]} ({message["playerId"]}): {message["text"]}");
 
             OnChatMessage.Invoke(message);
         }

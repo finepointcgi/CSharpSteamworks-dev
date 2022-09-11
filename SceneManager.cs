@@ -139,9 +139,9 @@ public class SceneManager : Node2D
 
     private void OnPlayerReady(Dictionary<string, string> playerDict)
     {
-        Console.WriteLine(playerDict);
-        Console.WriteLine(playerDict["playername"]);
-        Console.WriteLine(playerDict["isReady"]);
+        GD.Print(playerDict);
+        GD.Print(playerDict["playername"]);
+        GD.Print(playerDict["isReady"]);
     }
 
     private void OnChatMessage(Dictionary<string, string> dict){

@@ -47,7 +47,7 @@ public class SteamManager : Node
 
                 if (!SteamClient.IsValid)
                 {
-                    Console.WriteLine("Steam client not valid");
+                    GD.Print("Steam client not valid");
                     throw new Exception();
                 }
 
@@ -57,14 +57,14 @@ public class SteamManager : Node
                 activeUnrankedLobbies = new List<Lobby>();
                 activeRankedLobbies = new List<Lobby>();
                 connectedToSteam = true;
-                Console.WriteLine("Steam initialized: " + PlayerName);
+                GD.Print("Steam initialized: " + PlayerName);
             }
             catch (Exception e)
             {
                 connectedToSteam = false;
                 PlayerSteamIdString = "NoSteamId";
-                Console.WriteLine("Error connecting to Steam");
-                Console.WriteLine(e);
+                GD.Print("Error connecting to Steam");
+                GD.Print(e);
             }
         }
     }
@@ -86,7 +86,7 @@ public class SteamManager : Node
 
     public bool TryToReconnectToSteam()
     {
-        Console.WriteLine("Attempting to reconnect to Steam");
+        GD.Print("Attempting to reconnect to Steam");
         try
         {
             // Create client
@@ -94,7 +94,7 @@ public class SteamManager : Node
 
             if (!SteamClient.IsValid)
             {
-                Console.WriteLine("Steam client not valid");
+                GD.Print("Steam client not valid");
                 throw new Exception();
             }
 
@@ -102,15 +102,15 @@ public class SteamManager : Node
             PlayerSteamId = SteamClient.SteamId;
             activeUnrankedLobbies = new List<Lobby>();
             activeRankedLobbies = new List<Lobby>();
-            Console.WriteLine("Steam initialized: " + PlayerName);
+            GD.Print("Steam initialized: " + PlayerName);
             connectedToSteam = true;
             return true;
         }
         catch (Exception e)
         {
             connectedToSteam = false;
-            Console.WriteLine("Error connecting to Steam");
-            Console.WriteLine(e);
+            GD.Print("Error connecting to Steam");
+            GD.Print(e);
             return false;
         }
     }
@@ -165,7 +165,7 @@ public class SteamManager : Node
         }
         catch(Exception e)
         {
-            Console.WriteLine("Error receiving data on socket/connection " + e.Message);
+            GD.Print("Error receiving data on socket/connection " + e.Message);
         }
     }
 
@@ -193,7 +193,7 @@ public class SteamManager : Node
     {
         if (friend.Id != PlayerSteamId)
         {
-            Console.WriteLine("Opponent has left the lobby");
+            GD.Print("Opponent has left the lobby");
             LobbyPartnerDisconnected = true;
             try
             {
@@ -202,7 +202,7 @@ public class SteamManager : Node
             }
             catch
             {
-                Console.WriteLine("Unable to update disconnected player nameplate / process disconnect cleanly");
+                GD.Print("Unable to update disconnected player nameplate / process disconnect cleanly");
             }
 
         }
@@ -210,7 +210,7 @@ public class SteamManager : Node
 
     void OnLobbyGameCreatedCallback(Lobby lobby, uint ip, ushort port, SteamId steamId)
     {
-        Console.WriteLine("firing callback for on lobby game created.");
+        GD.Print("firing callback for on lobby game created.");
         //SceneManager.LoadScene("SceneToLoad");
     }
 
@@ -219,15 +219,15 @@ public class SteamManager : Node
         // Received chat message
         if (friend.Id != PlayerSteamId)
         {
-            Console.WriteLine("incoming chat message");
-            Console.WriteLine(message);
+            GD.Print("incoming chat message");
+            GD.Print(message);
 
             // I used chat to setup game parameters on occasion like when player joined lobby with preselected playable bug family, prob not best way to do it
             // But after host received player chat message I set off the OnLobbyGameCreated callback with lobby.SetGameServer(PlayerSteamId)
             //lobby.SetJoinable(false);
             lobby.SetGameServer(PlayerSteamId);
             //lobby.SendChatString("We are connected!");
-            Console.WriteLine(friend.Name + " has connected!");
+            GD.Print(friend.Name + " has connected!");
         }
     }
 
@@ -237,7 +237,7 @@ public class SteamManager : Node
         // You joined this lobby
         if (lobby.MemberCount > 0) // I do this because this callback triggers on host, I only wanted to use for players joining after host
         {
-            Console.WriteLine($"You joined {lobby.Owner.Name}'s lobby");
+            GD.Print($"You joined {lobby.Owner.Name}'s lobby");
 
             // Examples of things to do
             lobby.SendChatString("incoming player info");
@@ -258,7 +258,7 @@ public class SteamManager : Node
         RoomEnter joinedLobbySuccess = await joinedLobby.Join();
         if (joinedLobbySuccess != RoomEnter.Success)
         {
-            Console.WriteLine("failed to join lobby " + joinedLobbySuccess.ToString());
+            GD.Print("failed to join lobby " + joinedLobbySuccess.ToString());
         }
         else
         {
@@ -280,8 +280,8 @@ public class SteamManager : Node
         LobbyPartnerDisconnected = false;
         if (result != Result.OK)
         {
-            Console.WriteLine("lobby creation result not ok");
-            Console.WriteLine(result.ToString());
+            GD.Print("lobby creation result not ok");
+            GD.Print(result.ToString());
         }
 
         CreateSteamSocketServer();
@@ -290,7 +290,7 @@ public class SteamManager : Node
     void OnLobbyMemberJoinedCallback(Lobby lobby, Friend friend)
     {
         // The lobby member joined
-        Console.WriteLine("someone else joined lobby");
+        GD.Print("someone else joined lobby");
         OnPlayerJoinLobby.Invoke(friend.Name);
     }
 
@@ -322,8 +322,8 @@ public class SteamManager : Node
         }
         catch (Exception e)
         {
-            Console.WriteLine(e.ToString());
-            Console.WriteLine("Error fetching multiplayer lobbies");
+            GD.Print(e.ToString());
+            GD.Print("Error fetching multiplayer lobbies");
             return true;
         }
     }
@@ -336,7 +336,7 @@ public class SteamManager : Node
         }
         catch
         {
-            Console.WriteLine("Error leaving current lobby");
+            GD.Print("Error leaving current lobby");
         }
         
     }
@@ -348,7 +348,7 @@ public class SteamManager : Node
             var createLobbyOutput = await SteamMatchmaking.CreateLobbyAsync(5);
             if (!createLobbyOutput.HasValue)
             {
-                Console.WriteLine("Lobby created but not correctly instantiated");
+                GD.Print("Lobby created but not correctly instantiated");
                 throw new Exception();
             }
 
@@ -365,8 +365,8 @@ public class SteamManager : Node
         }
         catch (Exception exception)
         {
-            Console.WriteLine("Failed to create multiplayer lobby");
-            Console.WriteLine(exception.ToString());
+            GD.Print("Failed to create multiplayer lobby");
+            GD.Print(exception.ToString());
             return false;
         }
     }
@@ -375,12 +375,12 @@ public class SteamManager : Node
     {
         try
         {
-            Console.WriteLine("Creating Lobby");
+            GD.Print("Creating Lobby");
             var createLobbyOutput = await SteamMatchmaking.CreateLobbyAsync(20);
             
             if (!createLobbyOutput.HasValue)
             {
-                Console.WriteLine("Lobby created but not correctly instantiated");
+                GD.Print("Lobby created but not correctly instantiated");
                 throw new Exception();
             }
 
@@ -392,7 +392,7 @@ public class SteamManager : Node
             //hostedMultiplayerLobby.SetData("staticDataString", lobbyParameters.ToString());
 
             currentLobby = hostedMultiplayerLobby;
-            Console.WriteLine("Lobby was created");
+            GD.Print("Lobby was created");
             //var friend = new Friend();
             //friend. = PlayerName;
             OnPlayerJoinLobby(PlayerName);
@@ -401,8 +401,8 @@ public class SteamManager : Node
         }
         catch (Exception exception)
         {
-            Console.WriteLine("Failed to create multiplayer lobby");
-            Console.WriteLine(exception.ToString());
+            GD.Print("Failed to create multiplayer lobby");
+            GD.Print(exception.ToString());
             return false;
         }
     }
@@ -448,7 +448,7 @@ public class SteamManager : Node
         }
         catch
         {
-            Console.WriteLine("Unable to set unlocked achievement status on Steam");
+            GD.Print("Unable to set unlocked achievement status on Steam");
         }
     }
 
@@ -481,14 +481,14 @@ public class SteamManager : Node
         // Relay Socket servers are created/connected to through SteamIds rather than "Normal" Socket Servers which take IP addresses
         steamConnectionManager = SteamNetworkingSockets.ConnectRelay<SteamConnectionManager>(PlayerSteamId);
 
-        Console.WriteLine("created socket server!");
+        GD.Print("created socket server!");
     }
 
     public void JoinSteamSocketServer(SteamId host)
     {
         if (!IsHost)
         {
-            Console.WriteLine("joining socket server");
+            GD.Print("joining socket server");
             steamConnectionManager = SteamNetworkingSockets.ConnectRelay<SteamConnectionManager>(host, 0);
         }
     }
