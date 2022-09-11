@@ -25,6 +25,7 @@ namespace CSharpSteamworks.Networking
             {
                 if(Handlers.TryGetValue((PacketTypes)id, out PacketHandler handler))
                 {
+
                     handler.Invoke(senderId, packet);
                 }
                 else
@@ -67,21 +68,29 @@ namespace CSharpSteamworks.Networking
             // set ready state of this player.
         }
 
+
         public static void ChatMessage(uint senderId, Packet packet)
         {
             GD.Print($"Received a 'ChatMessage' packet.");
 
             Dictionary<string, string> message = PacketIO.UnpackObject<Dictionary<string, string>>(packet);
 
-            if (SteamManager.Instance.IsHost)
-            {
+            
                 // relay the message to other clients.
                 SteamManager.Broadcast(PacketIO.PackObject(PacketTypes.ChatMessage, message));
-            }
+            
 
             GD.Print($"{message["playerName"]} ({message["playerId"]}): {message["text"]}");
 
             OnChatMessage.Invoke(message);
+        }
+
+        public static void ReadyMessage(uint senderId, Packet packet){
+            Dictionary<string, string> message = PacketIO.UnpackObject<Dictionary<string, string>>(packet);
+
+            if(SteamManager.Instance.IsHost){
+
+            }
         }
     }
 }

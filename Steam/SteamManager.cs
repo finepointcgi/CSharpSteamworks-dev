@@ -71,10 +71,15 @@ public class SteamManager : Node
 
     public static void Broadcast(byte[] data)
     {
-        foreach (Connection connection in steamSocketManager.Connected.Skip(1).ToArray())
+        if (SteamManager.Instance.IsHost)
         {
-            connection.SendMessage(data);
+            // relay the message to other clients.
+            foreach (Connection connection in steamSocketManager.Connected.Skip(1).ToArray())
+            {
+                connection.SendMessage(data);
+            }
         }
+        
     }
 
     internal void RelaySocketMessageReceived(IntPtr data, int size, uint id)
