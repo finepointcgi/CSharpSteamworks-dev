@@ -88,12 +88,12 @@ public class SceneManager : Node2D
 
         lineEdit.Text = string.Empty;
 
-        OnChatMessage(message);
+        //OnChatMessage(message);
     }
 
     private void OnPlayerJoinLobby(Friend friend){
         var element = LobbyPlayer.Instance() as LobbyPlayer;
-        element.Name = friend.Name;
+        element.Name = friend.Id.AccountId.ToString();
         element.SetPlayerInfo(friend.Name);
         GetNode<VBoxContainer>("Lobby").AddChild(element);
     }
@@ -144,6 +144,7 @@ public class SceneManager : Node2D
 
     private void OnPlayerReady(Dictionary<string, string> playerDict)
     {
+        GetNode<LobbyPlayer>($"Lobby/{playerDict["PlayerName"]}").SetReadyStatus(playerDict["isReady"] == "True" ? true : false);
         GD.Print(playerDict);
         GD.Print(playerDict["playername"]);
         GD.Print(playerDict["isReady"]);
