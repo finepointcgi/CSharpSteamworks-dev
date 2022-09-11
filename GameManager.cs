@@ -35,12 +35,12 @@ public class GameManager : Node
     }
 
     public void OnPlayerLeftLobby(Friend player){
-        CurrentPlayers.Remove(CurrentPlayers.Where(x => x.FriendData.Id.Value == player.Id.Value).FirstOrDefault());
+        CurrentPlayers.Remove(CurrentPlayers.Where(x => x.FriendData.Id.AccountId == player.Id.AccountId).FirstOrDefault());
     }
 
 
     public void OnPlayerReady(Dictionary<string, string> dict){
-        Player currentFriend = CurrentPlayers.Where(x => x.FriendData.Id.Value.ToString() == dict["playername"]).FirstOrDefault();
+        Player currentFriend = CurrentPlayers.Where(x => x.FriendData.Id.AccountId.ToString() == dict["playername"]).FirstOrDefault();
         currentFriend.isReady = dict["isReady"] == "True" ? true : false;
         if(SteamManager.Instance.IsHost){
             SteamManager.Broadcast(PacketIO.PackObject(PacketTypes.GuestReady, dict));
