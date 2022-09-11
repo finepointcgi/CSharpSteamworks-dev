@@ -10,12 +10,16 @@ public class SceneManager : Node2D
 {
     // Declare member variables here. Examples:
     // private int a = 2;
-    // private string b = "text";
+    // private string b = "tescxt";
     private SteamManager steamManager;
     [Export]
     public PackedScene LobbyElement;
     [Export]
     public PackedScene LobbyPlayer;
+    [Export]
+    public PackedScene SceneToLoad;
+    [Export]
+    public PackedScene Player;
 
     public static SceneManager manager;
     private bool playerReady;
@@ -167,5 +171,13 @@ public class SceneManager : Node2D
 
         // send self into game
         // PackedScene instance with name "scene"
+        var s = SceneToLoad.Instance();
+        GetTree().Root.AddChild(s);
+        foreach(var currentPlayer in GameManager.CurrentPlayers){
+            var p = Player.Instance();
+            s.AddChild(p);
+            p.Name = currentPlayer.FriendData.Id.AccountId.ToString();
+            
+        }
     }
 }

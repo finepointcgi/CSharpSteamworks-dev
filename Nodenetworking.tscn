@@ -1,14 +1,18 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://SceneManager.cs" type="Script" id=1]
 [ext_resource path="res://Steam/SteamManager.cs" type="Script" id=2]
 [ext_resource path="res://LobbyElement.tscn" type="PackedScene" id=3]
 [ext_resource path="res://LobbyPlayer.tscn" type="PackedScene" id=4]
+[ext_resource path="res://GameScene.tscn" type="PackedScene" id=5]
+[ext_resource path="res://Player.tscn" type="PackedScene" id=6]
 
 [node name="Node2D" type="Node2D"]
 script = ExtResource( 1 )
 LobbyElement = ExtResource( 3 )
 LobbyPlayer = ExtResource( 4 )
+SceneToLoad = ExtResource( 5 )
+Player = ExtResource( 6 )
 
 [node name="Steam Manager" type="Node" parent="."]
 script = ExtResource( 2 )
@@ -91,6 +95,8 @@ margin_top = 534.0
 margin_right = 983.0
 margin_bottom = 582.0
 text = "Ready"
+
+[node name="Node" type="Node" parent="."]
 
 [connection signal="button_down" from="Button" to="." method="_on_Button_button_down"]
 [connection signal="button_down" from="Button2" to="." method="_on_Button2_button_down"]

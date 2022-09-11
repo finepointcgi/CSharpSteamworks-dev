@@ -50,11 +50,11 @@ public class GameManager
             {
                 // send self into game
                 // PackedScene instance with name "sceneName"
-                string scene = "sceneName";
+                string scene = "GameScene";
 
                 Dictionary<string, string> sceneData = new Dictionary<string, string>()
                 {
-                    { "sceneId", scene }
+                    { "sceneName", scene }
                 };
 
                 SceneManager.manager.OnStartGame(sceneData);
