@@ -70,11 +70,13 @@ public class SteamManager : Node
 
     public static void Broadcast(byte[] data)
     {
+        
         if (SteamManager.Instance.IsHost)
         {
             // relay the message to other clients.
             foreach (Connection connection in steamSocketManager.Connected.ToArray())
             {
+                var s = steamSocketManager.Connected;
                 connection.SendMessage(data);
             }
         }
@@ -482,7 +484,7 @@ public class SteamManager : Node
         steamSocketManager = SteamNetworkingSockets.CreateRelaySocket<SteamSocketManager>(0);
         // Host needs to connect to own socket server with a ConnectionManager to send/receive messages
         // Relay Socket servers are created/connected to through SteamIds rather than "Normal" Socket Servers which take IP addresses
-        steamConnectionManager = SteamNetworkingSockets.ConnectRelay<SteamConnectionManager>(PlayerSteamId.AccountId);
+        steamConnectionManager = SteamNetworkingSockets.ConnectRelay<SteamConnectionManager>(PlayerSteamId);
 
         GD.Print("created socket server!");
     }
