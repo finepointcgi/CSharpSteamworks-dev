@@ -7,14 +7,17 @@ namespace CSharpSteamworks.Networking
     public class PacketManager
     {
         public delegate void PacketHandler(uint senderId, Packet packet);
+        public static event Action<Dictionary<string, string>> OnHostStartGame;
         public static event Action<Dictionary<string, string>> OnPlayerReady;
         public static event Action<Dictionary<string, string>> OnChatMessage;
+        public static event Action<Dictionary<string, string>> OnUpdateReadyState;
 
         public static Dictionary<PacketTypes, PacketHandler> Handlers = new Dictionary<PacketTypes, PacketHandler>()
         {
             { PacketTypes.HostStartGame, HostStartGame },
             { PacketTypes.GuestReady, GuestReady },
-            { PacketTypes.ChatMessage, ChatMessage }
+            { PacketTypes.ChatMessage, ChatMessage },
+            { PacketTypes.UpdateReadyState, UpdateReadyState },
         };
 
         public static void Handle(uint senderId, Packet packet)
@@ -46,15 +49,13 @@ namespace CSharpSteamworks.Networking
             if (!SteamManager.Instance.IsHost)
             {
                 GD.Print($"Received a 'HostStartGame' packet.");
+                Dictionary<string, string> StartGame = PacketIO.UnpackObject<Dictionary<string, string>>(packet);
 
-                Dictionary<string, string> isReady = PacketIO.UnpackObject<Dictionary<string, string>>(packet);
+                StartGame.Print();
+
+                // send current player into game.
+                OnHostStartGame.Invoke(StartGame);
             }
-            else
-            {
-                GD.Print("Recieved host packet from non host!");
-            }
-            
-            // send current player into game.
         }
 
         public static void GuestReady(uint senderId, Packet packet)
@@ -64,6 +65,9 @@ namespace CSharpSteamworks.Networking
             GD.Print($"Received a 'GuestReady' packet.");
 
             Dictionary<string, string> ReadyPlayer = PacketIO.UnpackObject<Dictionary<string, string>>(packet);
+
+            ReadyPlayer.Print();
+
             OnPlayerReady.Invoke(ReadyPlayer);
             // set ready state of this player.
         }
@@ -75,21 +79,25 @@ namespace CSharpSteamworks.Networking
 
             Dictionary<string, string> message = PacketIO.UnpackObject<Dictionary<string, string>>(packet);
 
-            
-                // relay the message to other clients.
-                SteamManager.Broadcast(PacketIO.PackObject(PacketTypes.ChatMessage, message));
-            
+            // relay the message to other clients.
+            SteamManager.Broadcast(PacketIO.PackObject(PacketTypes.ChatMessage, message));
 
-            GD.Print($"{message["playerName"]} ({message["playerId"]}): {message["text"]}");
+            message.Print();
 
             OnChatMessage.Invoke(message);
         }
 
-        public static void ReadyMessage(uint senderId, Packet packet){
-            Dictionary<string, string> message = PacketIO.UnpackObject<Dictionary<string, string>>(packet);
+        public static void UpdateReadyState(uint senderId, Packet packet)
+        {
+            GD.Print($"Received a 'UpdateReadyState' packet.");
 
-            if(SteamManager.Instance.IsHost){
+            if(!SteamManager.Instance.IsHost)
+            {
+                Dictionary<string, string> readyState = PacketIO.UnpackObject<Dictionary<string, string>>(packet);
 
+                readyState.Print();
+
+                OnUpdateReadyState.Invoke(readyState);
             }
         }
     }

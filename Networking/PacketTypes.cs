@@ -7,6 +7,7 @@ namespace CSharpSteamworks.Networking
     {
         HostStartGame = 0,
         GuestReady = 1,
-        ChatMessage = 2
+        ChatMessage = 2,
+        UpdateReadyState = 3,
     }
 }
