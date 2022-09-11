@@ -110,8 +110,7 @@ public class SceneManager : Node2D
 
         if (steamManager.IsHost){
            
-         SteamManager.steamConnectionManager.SendMessages(SteamManager.steamSocketManager.Connected.ToArray(),
-                SteamManager.steamSocketManager.Connected.Count, PacketIO.PackObject(PacketTypes.HostStartGame, playerDict));
+         SteamManager.Broadcast(PacketIO.PackObject(PacketTypes.GuestReady, playerDict));
         }else{
             SteamManager.steamConnectionManager.Connection.SendMessage(PacketIO.PackObject(PacketTypes.GuestReady, playerDict));
         }
