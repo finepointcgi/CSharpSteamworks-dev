@@ -45,8 +45,22 @@ public class GameManager
         currentFriend.isReady = dict["isReady"] == "true" ? true : false;
         if(SteamManager.Instance.IsHost){
             SteamManager.Broadcast(PacketIO.PackObject(PacketTypes.GuestReady, dict));
-            if( CurrentPlayers.Count(x => x.isReady) == CurrentPlayers.Count){
-                SteamManager.Broadcast(PacketIO.PackObject(PacketTypes.HostStartGame, new Dictionary<string, string>()));
+
+            if( CurrentPlayers.Count(x => x.isReady) == CurrentPlayers.Count)
+            {
+                // send self into game
+                // PackedScene instance with name "sceneName"
+                string scene = "sceneName";
+
+                Dictionary<string, string> sceneData = new Dictionary<string, string>()
+                {
+                    { "sceneId", scene }
+                };
+
+                SceneManager.manager.OnStartGame(sceneData);
+
+                // send others into game
+                SteamManager.Broadcast(PacketIO.PackObject(PacketTypes.HostStartGame, sceneData));
             }
         }
     }

@@ -27,6 +27,7 @@ public class SceneManager : Node2D
         SteamManager.OnLobbyRefreshCompleted += OnLobbyRefreshCompleted;
         SteamManager.OnPlayerJoinLobby += OnPlayerJoinLobby;
         SteamManager.OnPlayerLeftLobby += OnPlayerLeftLobby;
+        PacketManager.OnHostStartGame += OnStartGame;
         PacketManager.OnPlayerReady += OnPlayerReady;
         PacketManager.OnChatMessage += OnChatMessage;
         manager = this;
@@ -158,5 +159,13 @@ public class SceneManager : Node2D
 
     private void OnChatMessage(Dictionary<string, string> dict){
         GetNode<RichTextLabel>("Control/RichTextLabel").Text = GetNode<RichTextLabel>("Control/RichTextLabel").Text + System.Environment.NewLine + dict["playerName"] + ": " + dict["text"];
+    }
+
+    public void OnStartGame(Dictionary<string, string> dict)
+    {
+        string scene = dict["sceneName"];
+
+        // send self into game
+        // PackedScene instance with name "scene"
     }
 }
