@@ -11,6 +11,7 @@ namespace CSharpSteamworks.Networking
         public static event Action<Dictionary<string, string>> OnPlayerReady;
         public static event Action<Dictionary<string, string>> OnChatMessage;
         public static event Action<Dictionary<string, string>> OnUpdateReadyState;
+        public static event Action<Dictionary<string, string>> OnUpdatePlayer;
 
         public static Dictionary<PacketTypes, PacketHandler> Handlers = new Dictionary<PacketTypes, PacketHandler>()
         {
@@ -18,6 +19,7 @@ namespace CSharpSteamworks.Networking
             { PacketTypes.GuestReady, GuestReady },
             { PacketTypes.ChatMessage, ChatMessage },
             { PacketTypes.UpdateReadyState, UpdateReadyState },
+            { PacketTypes.UpdatePlayerState, UpdatePlayerReadyState },
         };
 
         public static void Handle(uint senderId, Packet packet)
@@ -99,6 +101,20 @@ namespace CSharpSteamworks.Networking
 
                 OnUpdateReadyState.Invoke(readyState);
             }
+        }
+
+        public static void UpdatePlayerReadyState(uint senderId, Packet packet)
+        {
+            GD.Print($"Received a 'PlayerUpdate' packet.");
+
+            Dictionary<string, string> playerStatus = PacketIO.UnpackObject<Dictionary<string, string>>(packet);
+
+            // relay the message to other clients.
+            SteamManager.Broadcast(PacketIO.PackObject(PacketTypes.UpdatePlayerState, playerStatus));
+
+            playerStatus.Print();
+
+            OnUpdatePlayer.Invoke(playerStatus);
         }
     }
 }

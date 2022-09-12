@@ -9,5 +9,6 @@ namespace CSharpSteamworks.Networking
         GuestReady = 1,
         ChatMessage = 2,
         UpdateReadyState = 3,
+        UpdatePlayerState = 4,
     }
 }
