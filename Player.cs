@@ -9,18 +9,21 @@ public class Player : KinematicBody2D
     // Declare member variables here. Examples:
     // private int a = 2;
     // private string b = "text";
-	private int currentFrame;
-	private int totalFrame = 5;
 
-	public Friend FriendData;
-	public bool isReady;
-	[Export]
-	public bool Controlled;
+	private int currentFrame { get; set; }
+	private int totalFrame { get; set; } = 5;
+	public Friend FriendData { get; set; }
+    public bool isReady { get; set; }
+    [Export]
+	public bool Controlled { get; set; }
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
-		PacketManager.OnUpdatePlayer += OnUpdatePlayer;
+		//PacketManager.OnUpdateReadyState += onUpdatePlayer;
+		PacketManager.OnUpdatePlayer += onUpdatePlayer; 
     }
+
+
 
 //  // Called every frame. 'delta' is the elapsed time since the previous frame.
     public override void _Process(float delta)
@@ -64,11 +67,11 @@ public class Player : KinematicBody2D
 		
 	}
 
-	private void OnUpdatePlayer(Dictionary<string, string> dict)
+	public void onUpdatePlayer(System.Collections.Generic.Dictionary<string, string> dict)
 	{
 		if (dict["playerId"] == FriendData.Id.AccountId.ToString())
 		{
-			Position = Vector2(float.Parse(dict["positionx"]), float.Parse(dict["positiony"]));
+			Position = new Vector2(float.Parse(dict["positionx"]), float.Parse(dict["positiony"]));
 			Rotation = float.Parse(dict["rotation"]);
 
         }
