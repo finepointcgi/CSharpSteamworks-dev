@@ -71,13 +71,13 @@ public class Player : KinematicBody2D
 	public void onUpdatePlayer(System.Collections.Generic.Dictionary<string, string> dict)
 	{
 		
-		if (dict["playerId"] == FriendData.Id.AccountId.ToString() && dict["playerId"] == !SteamManager.Instance.PlayerSteamId.Value.ToString())
+		if (dict["playerId"] == FriendData.Id.AccountId.ToString() && dict["playerId"] != SteamManager.Instance.PlayerSteamId.Value.ToString())
 		{
 			
 			Position = new Vector2(float.Parse(dict["positionx"]), float.Parse(dict["positiony"]));
 			Rotation = float.Parse(dict["rotation"]);
 			GetNode<Tween>("Tween").InterpolateProperty(this, "position", Position, 
-				new Vector2(float.Parse(dict["positionx"]), float.Parse(dict["positiony"])),.1)
+				new Vector2(float.Parse(dict["positionx"]), float.Parse(dict["positiony"])),.1f);
         }
 	}
 }
