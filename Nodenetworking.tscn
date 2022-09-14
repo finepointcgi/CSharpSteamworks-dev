@@ -98,6 +98,14 @@ text = "Ready"
 
 [node name="Node" type="Node" parent="."]
 
+[node name="PlayerSpawn" type="Node2D" parent="."]
+
+[node name="1" type="Position2D" parent="PlayerSpawn"]
+position = Vector2( 224, 286 )
+
+[node name="2" type="Position2D" parent="PlayerSpawn"]
+position = Vector2( 563, 286 )
+
 [connection signal="button_down" from="Button" to="." method="_on_Button_button_down"]
 [connection signal="button_down" from="Button2" to="." method="_on_Button2_button_down"]
 [connection signal="button_down" from="Button4" to="." method="_on_LeaveLobby_button_down"]
