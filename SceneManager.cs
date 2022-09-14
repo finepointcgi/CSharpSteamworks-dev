@@ -173,9 +173,12 @@ public class SceneManager : Node2D
         // PackedScene instance with name "scene"
         var s = SceneToLoad.Instance();
         GetTree().Root.AddChild(s);
+        int i = 1;
         foreach(var currentPlayer in GameManager.CurrentPlayers){
             var p = Player.Instance() as Player;
-            s.AddChild(p);
+            
+            GetNode<Position2D>("PlayerSpawn/" + i.ToString()).AddChild(p);
+            i ++;
             p.Name = currentPlayer.FriendData.Id.AccountId.ToString();
             if(p.Name == SteamManager.Instance.PlayerSteamId.AccountId.ToString()){
                 p.Controlled = true;
