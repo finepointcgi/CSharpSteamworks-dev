@@ -174,10 +174,13 @@ public class SceneManager : Node2D
         var s = SceneToLoad.Instance();
         GetTree().Root.AddChild(s);
         foreach(var currentPlayer in GameManager.CurrentPlayers){
-            var p = Player.Instance();
+            var p = Player.Instance() as Player;
             s.AddChild(p);
             p.Name = currentPlayer.FriendData.Id.AccountId.ToString();
-            
+            if(p.Name == SteamManager.Instance.PlayerSteamId.AccountId.ToString()){
+                p.Controlled = true;
+            }
+
         }
     }
 }

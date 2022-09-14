@@ -46,6 +46,7 @@ public class Player : KinematicBody2D
 			currentFrame += 1;
 			if(currentFrame >= totalFrame){
 				updateRemoteLocation(Position, Rotation);
+				currentFrame = 0;
 			}
 		}
     }

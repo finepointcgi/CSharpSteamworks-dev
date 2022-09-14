@@ -19,7 +19,7 @@ namespace CSharpSteamworks.Networking
             { PacketTypes.GuestReady, GuestReady },
             { PacketTypes.ChatMessage, ChatMessage },
             { PacketTypes.UpdateReadyState, UpdateReadyState },
-            { PacketTypes.UpdatePlayerState, UpdatePlayerReadyState },
+            { PacketTypes.UpdatePlayerState, UpdatePlayerGameState },
         };
 
         public static void Handle(uint senderId, Packet packet)
@@ -103,7 +103,7 @@ namespace CSharpSteamworks.Networking
             }
         }
 
-        public static void UpdatePlayerReadyState(uint senderId, Packet packet)
+        public static void UpdatePlayerGameState(uint senderId, Packet packet)
         {
             GD.Print($"Received a 'PlayerUpdate' packet.");
 
