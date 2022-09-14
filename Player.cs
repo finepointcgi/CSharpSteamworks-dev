@@ -70,8 +70,10 @@ public class Player : KinematicBody2D
 
 	public void onUpdatePlayer(System.Collections.Generic.Dictionary<string, string> dict)
 	{
+		GD.Print("got player pos");
 		if (dict["playerId"] == FriendData.Id.AccountId.ToString())
 		{
+			GD.Print("set player pos");
 			Position = new Vector2(float.Parse(dict["positionx"]), float.Parse(dict["positiony"]));
 			Rotation = float.Parse(dict["rotation"]);
 

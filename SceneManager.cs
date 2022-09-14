@@ -180,6 +180,7 @@ public class SceneManager : Node2D
             GetNode<Position2D>("PlayerSpawn/" + i.ToString()).AddChild(p);
             i ++;
             p.Name = currentPlayer.FriendData.Id.AccountId.ToString();
+            p.FriendData = currentPlayer.FriendData;
             if(p.Name == SteamManager.Instance.PlayerSteamId.AccountId.ToString()){
                 p.Controlled = true;
             }
