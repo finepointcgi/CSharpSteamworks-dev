@@ -109,9 +109,10 @@ namespace CSharpSteamworks.Networking
 
             Dictionary<string, string> playerStatus = PacketIO.UnpackObject<Dictionary<string, string>>(packet);
 
+            if(SteamManager.Instance.IsHost){
             // relay the message to other clients.
-            SteamManager.Broadcast(PacketIO.PackObject(PacketTypes.UpdatePlayerState, playerStatus));
-
+                SteamManager.Broadcast(PacketIO.PackObject(PacketTypes.UpdatePlayerState, playerStatus));
+            }
             playerStatus.Print();
 
             OnUpdatePlayer.Invoke(playerStatus);

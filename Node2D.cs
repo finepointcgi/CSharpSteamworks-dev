@@ -127,8 +127,36 @@ public class Node2D : Godot.Node2D
 
     public void _on_AddScore_button_down()
     {
-        var t = Steamworks.Ugc.Query.All;
+        Steamworks.Ugc.Editor.NewCommunityFile
+            .WithTitle( "test file" )
+            .WithDescription( "test" )
+            .WithContent( "C:/tmp" )
+            .WithTag( "awesome" )
+            .WithTag( "small" )
+            .SubmitAsync( );
     }
+
+    public async void _on_Querry_Steamworks_button_down(){
+         var q = Steamworks.Ugc.Query.All;
+          var result = await q.GetPageAsync( 1 );
+
+    Console.WriteLine( $"ResultCount: {result?.ResultCount}" );
+    Console.WriteLine( $"TotalCount: {result?.TotalCount}" );
+
+    foreach ( Steamworks.Ugc.Item entry in result.Value.Entries )
+    {
+        Console.WriteLine( $"{entry.Title}" );
+    }
+
+    }
+    
+    public void _on_Download_Steamworks_button_down(){
+        SteamUGC.Download( 1717844711 );
+    }
+
+
+
+
 
 }
 

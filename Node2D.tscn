@@ -39,12 +39,26 @@ margin_right = 580.0
 margin_bottom = 186.0
 text = "Add Score"
 
-[node name="AddScore2" type="Button" parent="."]
+[node name="Add Steamworks" type="Button" parent="."]
 margin_left = 326.0
 margin_top = 229.0
 margin_right = 578.0
 margin_bottom = 289.0
-text = "Add Score"
+text = "Add Steamworks"
+
+[node name="Querry Steamworks" type="Button" parent="."]
+margin_left = 326.0
+margin_top = 313.0
+margin_right = 578.0
+margin_bottom = 373.0
+text = "Querry Steamworks"
+
+[node name="Download Steamworks" type="Button" parent="."]
+margin_left = 326.0
+margin_top = 402.0
+margin_right = 578.0
+margin_bottom = 462.0
+text = "Download Steamworks"
 
 [node name="Get Achevements" type="Button" parent="."]
 margin_left = 42.0
@@ -67,19 +81,6 @@ margin_right = 294.0
 margin_bottom = 543.0
 text = "Save file"
 
-[node name="Connect To Server" type="Button" parent="."]
-margin_left = 330.0
-margin_top = 313.0
-margin_right = 582.0
-margin_bottom = 373.0
-text = "Connect To Local Server"
-
-[node name="TextEdit" type="TextEdit" parent="Connect To Server"]
-margin_left = 340.0
-margin_top = 5.0
-margin_right = 552.0
-margin_bottom = 45.0
-
 [node name="Load File" type="Button" parent="."]
 margin_left = 39.0
 margin_top = 398.0
@@ -91,9 +92,10 @@ text = "Load file"
 [connection signal="button_down" from="Button2" to="." method="_on_Button2_button_down"]
 [connection signal="button_down" from="CreateLeaderBoard" to="." method="_on_CreateLeaderBoard_button_down"]
 [connection signal="button_down" from="AddScore" to="." method="_on_AddScore_button_down"]
-[connection signal="button_down" from="AddScore2" to="." method="_on_AddScore_button_down"]
+[connection signal="button_down" from="Add Steamworks" to="." method="_on_AddScore_button_down"]
+[connection signal="button_down" from="Querry Steamworks" to="." method="_on_Querry_Steamworks_button_down"]
+[connection signal="button_down" from="Download Steamworks" to="." method="_on_Download_Steamworks_button_down"]
 [connection signal="button_down" from="Get Achevements" to="." method="_on_Get_Achevements_button_down"]
 [connection signal="button_down" from="UnlockAchevo" to="." method="_on_UnlockAchevo_button_down"]
 [connection signal="button_down" from="Save file" to="." method="_on_Save_file_button_down"]
-[connection signal="button_down" from="Connect To Server" to="." method="_on_Connect_To_Server_button_down"]
 [connection signal="button_down" from="Load File" to="." method="_on_Load_File_button_down"]
